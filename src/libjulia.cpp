@@ -115,7 +115,16 @@ bool load_libjulia_symbols() {
     LOAD_JULIA_SYMBOL(jl_box_voidpointer);
     LOAD_JULIA_SYMBOL(jl_unbox_voidpointer);
 
+    LOAD_JULIA_SYMBOL(jl_alloc_array_1d);
+    LOAD_JULIA_SYMBOL(jl_apply_array_type);
+    LOAD_JULIA_SYMBOL(jl_arrayset);
+    LOAD_JULIA_SYMBOL(jl_arrayunset);
+    LOAD_JULIA_SYMBOL(jl_array_grow_end);
+
+    LOAD_JULIA_SYMBOL(jl_new_module);
     LOAD_JULIA_SYMBOL(jl_get_global);
+    LOAD_JULIA_SYMBOL(jl_set_global);
+    LOAD_JULIA_SYMBOL(jl_set_const);
 
     LOAD_JULIA_SYMBOL(jl_is_initialized);
     LOAD_JULIA_SYMBOL(jl_init);
@@ -130,6 +139,8 @@ bool load_libjulia_symbols() {
     LOAD_JULIA_SYMBOL(jl_call2);
     LOAD_JULIA_SYMBOL(jl_call3);
 
+    LOAD_JULIA_SYMBOL(jl_stdout_stream);
+    LOAD_JULIA_SYMBOL(jl_stdin_stream);
     LOAD_JULIA_SYMBOL(jl_stderr_stream);
     LOAD_JULIA_SYMBOL(jl_printf);
     LOAD_JULIA_SYMBOL(jl_flush_cstdio);
@@ -139,8 +150,14 @@ bool load_libjulia_symbols() {
     return true;
 }
 
-bool load_libjulia_modules() {
+bool load_libjulia_constants() {
     // not sure why LOAD_JULIA_SYMBOL fails
+
+    jl_any_type = jl_eval_string("Any");
+    jl_true = jl_eval_string("true");
+    jl_false = jl_eval_string("false");
+    jl_nothing = jl_eval_string("nothing");
+
     jl_main_module = (jl_module_t*) jl_eval_string("Main");
     jl_core_module = (jl_module_t*) jl_eval_string("Core");
     jl_base_module = (jl_module_t*) jl_eval_string("Base");

@@ -28,10 +28,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// juliaapi_print
+void juliaapi_print(SEXP s);
+RcppExport SEXP _juliaapi_juliaapi_print(SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type s(sSEXP);
+    juliaapi_print(s);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_juliaapi_juliaapi_init", (DL_FUNC) &_juliaapi_juliaapi_init, 1},
     {"_juliaapi_juliaapi_eval_string", (DL_FUNC) &_juliaapi_juliaapi_eval_string, 2},
+    {"_juliaapi_juliaapi_print", (DL_FUNC) &_juliaapi_juliaapi_print, 1},
     {NULL, NULL, 0}
 };
 

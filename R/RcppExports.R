@@ -9,3 +9,7 @@ juliaapi_eval_string <- function(str, preserve = FALSE) {
     .Call('_juliaapi_juliaapi_eval_string', PACKAGE = 'juliaapi', str, preserve)
 }
 
+juliaapi_print <- function(s) {
+    invisible(.Call('_juliaapi_juliaapi_print', PACKAGE = 'juliaapi', s))
+}
+
