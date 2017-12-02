@@ -67,14 +67,14 @@ void juliaapi_gc_release(jl_value_t* s) {
     }
 }
 
-void juliaapi_gc_release_noop(jl_value_t* s) {}
+typedef XPtr<jl_value_t, NoProtectStorage, juliaapi_gc_release> jl_value_xptr;
 
 SEXP juliaapi_make_xptr(jl_value_t* s, bool preserve = true) {
     if (preserve) {
         juliaapi_gc_preserve(s);
-        return XPtr<jl_value_t, NoProtectStorage, juliaapi_gc_release>(s);
+        return jl_value_xptr(s);
     } else {
-        return XPtr<jl_value_t, NoProtectStorage, juliaapi_gc_release_noop>(s);
+        return jl_value_xptr(s, false);
     }
 }
 
@@ -116,7 +116,7 @@ SEXP juliaapi_eval_string(const char* str, bool preserve = true) {
 
 // [[Rcpp::export]]
 void juliaapi_print(SEXP s) {
-    XPtr<jl_value_t, NoProtectStorage, juliaapi_gc_release_noop> p(s);
+    jl_value_xptr p(s);
     jl_call2(jl_get_function(jl_base_module, "show"), jl_stdout_obj(), p);
     jl_printf(jl_stderr_stream(), "\n");
     juliaapi_check_exception();

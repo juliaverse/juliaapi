@@ -5,7 +5,7 @@ juliaapi_init <- function(libpath) {
     .Call('_juliaapi_juliaapi_init', PACKAGE = 'juliaapi', libpath)
 }
 
-juliaapi_eval_string <- function(str, preserve = FALSE) {
+juliaapi_eval_string <- function(str, preserve = TRUE) {
     .Call('_juliaapi_juliaapi_eval_string', PACKAGE = 'juliaapi', str, preserve)
 }
 
