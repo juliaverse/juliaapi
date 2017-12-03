@@ -4,18 +4,20 @@
 #' @import Rcpp
 NULL
 
+JL_CONSTS <- new.env(parent = emptyenv())
+
+#' @export
+jl_constants <- function(which) {
+    JL_CONSTS[[which]]
+}
+
 #' @export
 jl_init <- function() {
     libjulia <- system2(
         "julia", shQuote(c("-e", 'print(Libdl.dlpath("libjulia"))')), stdout = TRUE)
     juliaapi_init(libjulia)
-}
-
-#' @export
-jl_eval <- function(string) {
-    ret <- juliaapi_eval_string(string)
-    class(ret) <- "jl_value"
-    ret
+    juliaapi_load_constants(JL_CONSTS)
+    invisible(TRUE)
 }
 
 #' @export
