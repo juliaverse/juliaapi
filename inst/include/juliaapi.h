@@ -3,18 +3,13 @@
 
 #include "julia.h"
 
-namespace libjulia {
+// make RcppExports.cpp not complain
+using namespace julia;
 
-std::string get_last_loaded_symbol();
-std::string get_last_dl_error_message();
-
-JL_EXTERN void* libjulia_t;
-bool load_libjulia(const std::string& libpath);
-bool unload_libjulia();
-bool load_libjulia_symbols();
-bool load_libjulia_constants();
-
+#include <RcppCommon.h>
+namespace Rcpp {
+    SEXP wrap(jl_value_t* object);
+    template<> jl_value_t* as(SEXP object);
 }
-
 
 #endif

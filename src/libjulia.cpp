@@ -1,19 +1,13 @@
-#define JULIA_CPP
-#include "../inst/include/juliaapi.h"
+#define LIBJULIA_CPP
 
-#ifndef _WIN32
-#include <dlfcn.h>
-#else
-#define WIN32_LEAN_AND_MEAN 1
-#include <windows.h>
-#endif
-
+#include "../inst/include/libjulia.h"
 #include <string>
 
 using namespace julia;
 
 namespace libjulia {
 
+void* libjulia_t;
 std::string last_loaded_symbol;
 
 std::string get_last_loaded_symbol() {
@@ -53,6 +47,36 @@ std::string get_last_dl_error_message() {
     return Error;
 }
 
+bool load(const std::string& libpath) {
+    libjulia_t = NULL;
+#ifdef _WIN32
+    libjulia_t = (void*)::LoadLibraryEx(libpath.c_str(), NULL, 0);
+#else
+    libjulia_t = ::dlopen(libpath.c_str(), RTLD_NOW|RTLD_GLOBAL);
+#endif
+    if (libjulia_t == NULL) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool unload() {
+  if (libjulia_t != NULL) {
+#ifdef _WIN32
+    if (!::FreeLibrary((HMODULE)libjulia_t)) {
+#else
+    if (::dlclose(libjulia_t) != 0) {
+#endif
+      return false;
+    } else {
+      return true;
+    }
+  }
+  else
+    return true;
+}
+
 bool load_symbol(const std::string& name, void** ppSymbol) {
 
     last_loaded_symbol = name;
@@ -69,36 +93,6 @@ bool load_symbol(const std::string& name, void** ppSymbol) {
     }
 }
 
-bool load_libjulia(const std::string& libpath) {
-    libjulia_t = NULL;
-#ifdef _WIN32
-    libjulia_t = (void*)::LoadLibraryEx(libpath.c_str(), NULL, 0);
-#else
-    libjulia_t = ::dlopen(libpath.c_str(), RTLD_NOW|RTLD_GLOBAL);
-#endif
-    if (libjulia_t == NULL) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-bool unload_libjulia() {
-  if (libjulia_t != NULL) {
-#ifdef _WIN32
-    if (!::FreeLibrary((HMODULE)libjulia_t)) {
-#else
-    if (::dlclose(libjulia_t) != 0) {
-#endif
-      return false;
-    } else {
-      return true;
-    }
-  }
-  else
-    return true;
-}
-
 #define LOAD_JULIA_SYMBOL_AS(name, as) \
 if (!load_symbol(#name, (void**) &as)) \
     return false;
@@ -107,7 +101,7 @@ if (!load_symbol(#name, (void**) &as)) \
 if (!load_symbol(#name, (void**) &name)) \
     return false;
 
-bool load_libjulia_symbols() {
+bool load_symbols() {
     LOAD_JULIA_SYMBOL(jl_get_ptls_states);
 
     LOAD_JULIA_SYMBOL(jl_typeof_str);
@@ -151,7 +145,7 @@ bool load_libjulia_symbols() {
     return true;
 }
 
-bool load_libjulia_constants() {
+bool load_constants() {
     // not sure why LOAD_JULIA_SYMBOL fails
 
     jl_any_type = jl_eval_string("Any");

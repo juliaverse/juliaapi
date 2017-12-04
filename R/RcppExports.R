@@ -9,8 +9,8 @@ juliaapi_load_constants <- function(env) {
     invisible(.Call('_juliaapi_juliaapi_load_constants', PACKAGE = 'juliaapi', env))
 }
 
-juliaapi_print <- function(s) {
-    invisible(.Call('_juliaapi_juliaapi_print', PACKAGE = 'juliaapi', s))
+juliaapi_print <- function(t) {
+    invisible(.Call('_juliaapi_juliaapi_print', PACKAGE = 'juliaapi', t))
 }
 
 #' @export

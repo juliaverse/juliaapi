@@ -1,26 +1,39 @@
-#include <Rcpp.h>
-#include "../inst/include/juliaapi.h"
+#define JULIAAPI_CPP
+#include "../inst/include/julia.h"
+#include "../inst/include/libjulia.h"
+#include "Rcpp.h"
 #include "xptr.h"
 
 using namespace julia;
-using namespace libjulia;
 using namespace Rcpp;
+
+namespace Rcpp {
+
+SEXP wrap(jl_value_t* object) {
+    return cast_xptr(object);
+}
+
+template<> jl_value_t* as(SEXP object) {
+    return cast_jl_value_t(object);
+}
+
+}
 
 // [[Rcpp::export]]
 bool juliaapi_init(const std::string& libpath) {
     if (jl_main_module != NULL) {
         return true;
     }
-    if (!load_libjulia(libpath)) {
-        stop(libpath + " - " + get_last_dl_error_message());
+    if (!libjulia::load(libpath)) {
+        stop(libpath + " - " + libjulia::get_last_dl_error_message());
     }
-    if (!load_libjulia_symbols()) {
-        stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
+    if (!libjulia::load_symbols()) {
+        stop(libjulia::get_last_loaded_symbol() + " - " + libjulia::get_last_dl_error_message());
     }
 
     jl_init();
 
-    load_libjulia_constants();
+    libjulia::load_constants();
 
     R_RegisterCCallable("juliaapi", "jl_eval_string", (DL_FUNC) jl_eval_string);
 
@@ -51,9 +64,9 @@ void juliaapi_check_exception() {
 }
 
 // [[Rcpp::export]]
-void juliaapi_print(SEXP s) {
+void juliaapi_print(jl_value_t* t) {
     // TODO: print to R STDOUT
-    jl_call2(jl_get_function(jl_base_module, "show"), jl_stdout_obj(), cast_jl_value_t(s));
+    jl_call2(jl_get_function(jl_base_module, "show"), jl_stdout_obj(), t);
     jl_printf(jl_stderr_stream(), "\n");
     juliaapi_check_exception();
 }
@@ -69,8 +82,8 @@ SEXP juliaapi_eval_string(const char* str, bool preserve = true) {
 
 //' @export
 // [[Rcpp::export(jl_get_function)]]
-SEXP juliaapi_get_function(SEXP module, const char* str) {
-    jl_function_t* f = jl_get_function(cast_jl_value_t(module), str);
+SEXP juliaapi_get_function(jl_value_t* module, const char* str) {
+    jl_function_t* f = jl_get_function(module, str);
     if (f == nullptr) {
         stop("function not found in module.");
     }
@@ -79,48 +92,46 @@ SEXP juliaapi_get_function(SEXP module, const char* str) {
 
 //' @export
 // [[Rcpp::export(jl_call)]]
-SEXP juliaapi_call(SEXP f, List args) {
+jl_value_t* juliaapi_call(jl_value_t* f, List args) {
     int32_t nargs = args.size();
     jl_value_t** a = new jl_value_t*[nargs];
     for (int i = 0; i < nargs; i++) {
         a[i] = (jl_value_t*) cast_jl_value_t(args[i]);
     }
-    jl_value_t* result = jl_call(cast_jl_value_t(f), a, nargs);
+    jl_value_t* result = jl_call(f, a, nargs);
     delete[] a;
     juliaapi_check_exception();
-    return cast_xptr(result);
+    return result;
 }
 
 //' @export
 // [[Rcpp::export(jl_call0)]]
-SEXP juliaapi_call0(SEXP f) {
-    jl_value_t* result = jl_call0(cast_jl_value_t(f));
+jl_value_t* juliaapi_call0(jl_value_t* f) {
+    jl_value_t* result = jl_call0(f);
     juliaapi_check_exception();
-    return cast_xptr(result);
+    return result;
 }
 
 //' @export
 // [[Rcpp::export(jl_call1)]]
-SEXP juliaapi_call1(SEXP f, SEXP a) {
-    jl_value_t* result = jl_call1(cast_jl_value_t(f), cast_jl_value_t(a));
+jl_value_t* juliaapi_call1(jl_value_t* f, jl_value_t* a) {
+    jl_value_t* result = jl_call1(f, a);
     juliaapi_check_exception();
-    return cast_xptr(result);
+    return result;
 }
 
 //' @export
 // [[Rcpp::export(jl_call2)]]
-SEXP juliaapi_call2(SEXP f, SEXP a, SEXP b) {
-    jl_value_t* result = jl_call2(
-        cast_jl_value_t(f), cast_jl_value_t(a), cast_jl_value_t(b));
+jl_value_t* juliaapi_call2(jl_value_t* f, jl_value_t* a, jl_value_t* b) {
+    jl_value_t* result = jl_call2(f, a, b);
     juliaapi_check_exception();
-    return cast_xptr(result);
+    return result;
 }
 
 //' @export
 // [[Rcpp::export(jl_call3)]]
-SEXP juliaapi_call3(SEXP f, SEXP a, SEXP b, SEXP c) {
-    jl_value_t* result = jl_call3(
-        cast_jl_value_t(f), cast_jl_value_t(a), cast_jl_value_t(b), cast_jl_value_t(c));
+jl_value_t* juliaapi_call3(jl_value_t* f, jl_value_t* a, jl_value_t* b, jl_value_t* c) {
+    jl_value_t* result = jl_call3(f, a, b, c);
     juliaapi_check_exception();
-    return cast_xptr(result);
+    return result;
 }

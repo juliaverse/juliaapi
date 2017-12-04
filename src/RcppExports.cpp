@@ -28,12 +28,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // juliaapi_print
-void juliaapi_print(SEXP s);
-RcppExport SEXP _juliaapi_juliaapi_print(SEXP sSEXP) {
+void juliaapi_print(jl_value_t* t);
+RcppExport SEXP _juliaapi_juliaapi_print(SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type s(sSEXP);
-    juliaapi_print(s);
+    Rcpp::traits::input_parameter< jl_value_t* >::type t(tSEXP);
+    juliaapi_print(t);
     return R_NilValue;
 END_RCPP
 }
@@ -50,75 +50,75 @@ BEGIN_RCPP
 END_RCPP
 }
 // juliaapi_get_function
-SEXP juliaapi_get_function(SEXP module, const char* str);
+SEXP juliaapi_get_function(jl_value_t* module, const char* str);
 RcppExport SEXP _juliaapi_juliaapi_get_function(SEXP moduleSEXP, SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type module(moduleSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type module(moduleSEXP);
     Rcpp::traits::input_parameter< const char* >::type str(strSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_get_function(module, str));
     return rcpp_result_gen;
 END_RCPP
 }
 // juliaapi_call
-SEXP juliaapi_call(SEXP f, List args);
+jl_value_t* juliaapi_call(jl_value_t* f, List args);
 RcppExport SEXP _juliaapi_juliaapi_call(SEXP fSEXP, SEXP argsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type f(fSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type f(fSEXP);
     Rcpp::traits::input_parameter< List >::type args(argsSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_call(f, args));
     return rcpp_result_gen;
 END_RCPP
 }
 // juliaapi_call0
-SEXP juliaapi_call0(SEXP f);
+jl_value_t* juliaapi_call0(jl_value_t* f);
 RcppExport SEXP _juliaapi_juliaapi_call0(SEXP fSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type f(fSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type f(fSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_call0(f));
     return rcpp_result_gen;
 END_RCPP
 }
 // juliaapi_call1
-SEXP juliaapi_call1(SEXP f, SEXP a);
+jl_value_t* juliaapi_call1(jl_value_t* f, jl_value_t* a);
 RcppExport SEXP _juliaapi_juliaapi_call1(SEXP fSEXP, SEXP aSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type f(fSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type a(aSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type f(fSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type a(aSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_call1(f, a));
     return rcpp_result_gen;
 END_RCPP
 }
 // juliaapi_call2
-SEXP juliaapi_call2(SEXP f, SEXP a, SEXP b);
+jl_value_t* juliaapi_call2(jl_value_t* f, jl_value_t* a, jl_value_t* b);
 RcppExport SEXP _juliaapi_juliaapi_call2(SEXP fSEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type f(fSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type a(aSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type b(bSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type f(fSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type a(aSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_call2(f, a, b));
     return rcpp_result_gen;
 END_RCPP
 }
 // juliaapi_call3
-SEXP juliaapi_call3(SEXP f, SEXP a, SEXP b, SEXP c);
+jl_value_t* juliaapi_call3(jl_value_t* f, jl_value_t* a, jl_value_t* b, jl_value_t* c);
 RcppExport SEXP _juliaapi_juliaapi_call3(SEXP fSEXP, SEXP aSEXP, SEXP bSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type f(fSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type a(aSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type b(bSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type c(cSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type f(fSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type a(aSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type b(bSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type c(cSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_call3(f, a, b, c));
     return rcpp_result_gen;
 END_RCPP
