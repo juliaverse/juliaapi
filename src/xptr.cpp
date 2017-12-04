@@ -1,7 +1,7 @@
 #include "xptr.h"
 #include <stack>
 
-using namespace libjulia;
+using namespace julia;
 using namespace Rcpp;
 
 

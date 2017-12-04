@@ -15,36 +15,36 @@ juliaapi_print <- function(s) {
 
 #' @export
 jl_eval_string <- function(str, preserve = TRUE) {
-    .Call('_juliaapi__jl_eval_string', PACKAGE = 'juliaapi', str, preserve)
+    .Call('_juliaapi_juliaapi_eval_string', PACKAGE = 'juliaapi', str, preserve)
 }
 
 #' @export
 jl_get_function <- function(module, str) {
-    .Call('_juliaapi__jl_get_function', PACKAGE = 'juliaapi', module, str)
+    .Call('_juliaapi_juliaapi_get_function', PACKAGE = 'juliaapi', module, str)
 }
 
 #' @export
 jl_call <- function(f, args) {
-    .Call('_juliaapi__jl_call', PACKAGE = 'juliaapi', f, args)
+    .Call('_juliaapi_juliaapi_call', PACKAGE = 'juliaapi', f, args)
 }
 
 #' @export
 jl_call0 <- function(f) {
-    .Call('_juliaapi__jl_call0', PACKAGE = 'juliaapi', f)
+    .Call('_juliaapi_juliaapi_call0', PACKAGE = 'juliaapi', f)
 }
 
 #' @export
 jl_call1 <- function(f, a) {
-    .Call('_juliaapi__jl_call1', PACKAGE = 'juliaapi', f, a)
+    .Call('_juliaapi_juliaapi_call1', PACKAGE = 'juliaapi', f, a)
 }
 
 #' @export
 jl_call2 <- function(f, a, b) {
-    .Call('_juliaapi__jl_call2', PACKAGE = 'juliaapi', f, a, b)
+    .Call('_juliaapi_juliaapi_call2', PACKAGE = 'juliaapi', f, a, b)
 }
 
 #' @export
 jl_call3 <- function(f, a, b, c) {
-    .Call('_juliaapi__jl_call3', PACKAGE = 'juliaapi', f, a, b, c)
+    .Call('_juliaapi_juliaapi_call3', PACKAGE = 'juliaapi', f, a, b, c)
 }
 

@@ -1,5 +1,5 @@
-#define LIBJULIA_CPP
-#include "libjulia.h"
+#define JULIA_CPP
+#include "../inst/include/juliaapi.h"
 
 #ifndef _WIN32
 #include <dlfcn.h>
@@ -10,8 +10,9 @@
 
 #include <string>
 
-namespace libjulia {
+using namespace julia;
 
+namespace libjulia {
 
 std::string last_loaded_symbol;
 
@@ -52,14 +53,14 @@ std::string get_last_dl_error_message() {
     return Error;
 }
 
-bool load_symbol(void* plib, const std::string& name, void** ppSymbol) {
+bool load_symbol(const std::string& name, void** ppSymbol) {
 
     last_loaded_symbol = name;
     *ppSymbol = NULL;
 #ifdef _WIN32
-    *ppSymbol = (void*)::GetProcAddress((HINSTANCE)plib, name.c_str());
+    *ppSymbol = (void*)::GetProcAddress((HINSTANCE) libjulia_t, name.c_str());
 #else
-    *ppSymbol = ::dlsym(plib, name.c_str());
+    *ppSymbol = ::dlsym(libjulia_t, name.c_str());
 #endif
     if (*ppSymbol == NULL) {
         return false;
@@ -99,11 +100,11 @@ bool unload_libjulia() {
 }
 
 #define LOAD_JULIA_SYMBOL_AS(name, as) \
-if (!load_symbol(libjulia_t, #name, (void**) &as)) \
+if (!load_symbol(#name, (void**) &as)) \
     return false;
 
 #define LOAD_JULIA_SYMBOL(name) \
-if (!load_symbol(libjulia_t, #name, (void**) &name)) \
+if (!load_symbol(#name, (void**) &name)) \
     return false;
 
 bool load_libjulia_symbols() {
@@ -164,4 +165,4 @@ bool load_libjulia_constants() {
     return true;
 }
 
-} // namespace libjulia
+} // namespace julia

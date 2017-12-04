@@ -1,7 +1,8 @@
 #include <Rcpp.h>
-#include "libjulia.h"
+#include "../inst/include/juliaapi.h"
 #include "xptr.h"
 
+using namespace julia;
 using namespace libjulia;
 using namespace Rcpp;
 
@@ -20,6 +21,8 @@ bool juliaapi_init(const std::string& libpath) {
     jl_init();
 
     load_libjulia_constants();
+
+    R_RegisterCCallable("juliaapi", "jl_eval_string", (DL_FUNC) jl_eval_string);
 
     return true;
 }
@@ -58,7 +61,7 @@ void juliaapi_print(SEXP s) {
 
 //' @export
 // [[Rcpp::export(jl_eval_string)]]
-SEXP _jl_eval_string(const char* str, bool preserve = true) {
+SEXP juliaapi_eval_string(const char* str, bool preserve = true) {
     jl_value_t* result = jl_eval_string(str);
     juliaapi_check_exception();
     return cast_xptr(result, preserve);
@@ -66,7 +69,7 @@ SEXP _jl_eval_string(const char* str, bool preserve = true) {
 
 //' @export
 // [[Rcpp::export(jl_get_function)]]
-SEXP _jl_get_function(SEXP module, const char* str) {
+SEXP juliaapi_get_function(SEXP module, const char* str) {
     jl_function_t* f = jl_get_function(cast_jl_value_t(module), str);
     if (f == nullptr) {
         stop("function not found in module.");
@@ -76,7 +79,7 @@ SEXP _jl_get_function(SEXP module, const char* str) {
 
 //' @export
 // [[Rcpp::export(jl_call)]]
-SEXP _jl_call(SEXP f, List args) {
+SEXP juliaapi_call(SEXP f, List args) {
     int32_t nargs = args.size();
     jl_value_t** a = new jl_value_t*[nargs];
     for (int i = 0; i < nargs; i++) {
@@ -90,7 +93,7 @@ SEXP _jl_call(SEXP f, List args) {
 
 //' @export
 // [[Rcpp::export(jl_call0)]]
-SEXP _jl_call0(SEXP f) {
+SEXP juliaapi_call0(SEXP f) {
     jl_value_t* result = jl_call0(cast_jl_value_t(f));
     juliaapi_check_exception();
     return cast_xptr(result);
@@ -98,7 +101,7 @@ SEXP _jl_call0(SEXP f) {
 
 //' @export
 // [[Rcpp::export(jl_call1)]]
-SEXP _jl_call1(SEXP f, SEXP a) {
+SEXP juliaapi_call1(SEXP f, SEXP a) {
     jl_value_t* result = jl_call1(cast_jl_value_t(f), cast_jl_value_t(a));
     juliaapi_check_exception();
     return cast_xptr(result);
@@ -106,7 +109,7 @@ SEXP _jl_call1(SEXP f, SEXP a) {
 
 //' @export
 // [[Rcpp::export(jl_call2)]]
-SEXP _jl_call2(SEXP f, SEXP a, SEXP b) {
+SEXP juliaapi_call2(SEXP f, SEXP a, SEXP b) {
     jl_value_t* result = jl_call2(
         cast_jl_value_t(f), cast_jl_value_t(a), cast_jl_value_t(b));
     juliaapi_check_exception();
@@ -115,7 +118,7 @@ SEXP _jl_call2(SEXP f, SEXP a, SEXP b) {
 
 //' @export
 // [[Rcpp::export(jl_call3)]]
-SEXP _jl_call3(SEXP f, SEXP a, SEXP b, SEXP c) {
+SEXP juliaapi_call3(SEXP f, SEXP a, SEXP b, SEXP c) {
     jl_value_t* result = jl_call3(
         cast_jl_value_t(f), cast_jl_value_t(a), cast_jl_value_t(b), cast_jl_value_t(c));
     juliaapi_check_exception();
