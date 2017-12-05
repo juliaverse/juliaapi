@@ -1,6 +1,6 @@
 #define JULIAAPI_CPP
-#include "../inst/include/julia.h"
-#include "../inst/include/libjulia.h"
+#define JULIAAPI_LOADING
+#include "../inst/include/juliaapi.h"
 #include "Rcpp.h"
 #include "xptr.h"
 
@@ -9,13 +9,13 @@ using namespace Rcpp;
 
 namespace Rcpp {
 
-SEXP wrap(jl_value_t* object) {
-    return cast_xptr(object);
-}
+    SEXP wrap(jl_value_t* object) {
+        return cast_xptr(object, true);
+    }
 
-template<> jl_value_t* as(SEXP object) {
-    return cast_jl_value_t(object);
-}
+    template<> jl_value_t* as(SEXP object) {
+        return cast_jl_value_t(object);
+    }
 
 }
 
@@ -34,8 +34,6 @@ bool juliaapi_init(const std::string& libpath) {
     jl_init();
 
     libjulia::load_constants();
-
-    R_RegisterCCallable("juliaapi", "jl_eval_string", (DL_FUNC) jl_eval_string);
 
     return true;
 }

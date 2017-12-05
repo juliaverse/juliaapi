@@ -5,7 +5,7 @@
 #include <ostream>
 #include <stdint.h>
 
-#ifndef LIBJULIA_CPP
+#ifndef JULIAAPI_LOADING
 #define JL_EXTERN extern
 #else
 #define JL_EXTERN

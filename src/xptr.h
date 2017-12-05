@@ -1,7 +1,7 @@
 #ifndef XPTR_H
 #define XPTR_H
 
-#include "../inst/include/julia.h"
+#include "../inst/include/juliaapi.h"
 #include <Rcpp.h>
 
 using namespace julia;
