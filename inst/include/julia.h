@@ -22,8 +22,6 @@
 #  define INLINE inline
 #endif
 
-namespace julia {
-
 #define STORE_ARRAY_LEN
 #define JULIA_ENABLE_THREADING
 
@@ -172,7 +170,5 @@ JL_EXTERN int (*jl_printf)(uv_stream_t *s, const char *format, ...)
 JL_EXTERN void (*jl_flush_cstdio)(void);
 JL_EXTERN jl_value_t* (*jl_stdout_obj)(void);
 JL_EXTERN jl_value_t* (*jl_stderr_obj)(void);
-
-} // namespace julia
 
 #endif

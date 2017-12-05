@@ -14,8 +14,6 @@
 #include <windows.h>
 #endif
 
-using namespace julia;
-
 namespace libjulia {
 
 void* libjulia_t;
