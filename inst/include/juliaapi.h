@@ -10,4 +10,8 @@ namespace Rcpp {
     template<> jl_value_t* as(SEXP object);
 }
 
+#ifdef JULIAAPI_INIT
+    #include "juliaapi_init.h"
+#endif
+
 #endif

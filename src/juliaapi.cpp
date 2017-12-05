@@ -1,5 +1,5 @@
 #define JULIAAPI_CPP
-#include "../inst/include/juliaapi_init.h"
+#define JULIAAPI_INIT
 #include "../inst/include/juliaapi.h"
 #include <Rcpp.h>
 
