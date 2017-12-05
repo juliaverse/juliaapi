@@ -1,6 +1,8 @@
 #include "../inst/include/julia.h"
-#include <Rcpp.h>
 #include <stack>
+#include <map>
+#include <R.h>
+#include <Rinternals.h>
 
 std::map<jl_value_t*, std::pair<size_t, size_t> > gc_index_map;
 std::stack<size_t> gc_free_stack;
@@ -52,7 +54,7 @@ void gc_release(jl_value_t* s) {
     std::map<jl_value_t*, std::pair<size_t, size_t> >::iterator it;
     it = gc_index_map.find(s);
     if(it == gc_index_map.end()) {
-        Rcpp::stop("trying to release an unprotected julia object.");
+        error("trying to release an unprotected julia object.");
     } else {
         it->second.second -= 1;
         if(it->second.second == 0) {

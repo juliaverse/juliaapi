@@ -200,9 +200,6 @@ bool load_julia_constants() {
 
     SEXP cast_xptr(jl_value_t* s, bool preserve);
     jl_value_t* cast_jl_value_t(SEXP s);
-    void juliaapi_check_exception();
-    void juliaapi_print(jl_value_t* t);
-    SEXP juliaapi_eval_string(const char* str, bool preserve);
     void juliaapi_init();
 
 #else
@@ -210,10 +207,6 @@ bool load_julia_constants() {
 
     SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
     jl_value_t* (*cast_jl_value_t)(SEXP s);
-    void (*juliaapi_check_exception)();
-    void (*juliaapi_print)(jl_value_t* t);
-    SEXP (*juliaapi_eval_string)(const char* str, bool preserve);
-
     void juliaapi_init() {
         load_julia_symbol("cast_xptr", (void**) &cast_xptr);
         load_julia_symbol("cast_jl_value_t", (void**) &cast_jl_value_t);
