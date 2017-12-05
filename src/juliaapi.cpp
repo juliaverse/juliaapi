@@ -35,6 +35,9 @@ bool juliaapi_init(const std::string& libpath) {
 
     libjulia::load_constants();
 
+    R_RegisterCCallable("juliaapi", "cast_xptr", (DL_FUNC) cast_xptr);
+    R_RegisterCCallable("juliaapi", "cast_jl_value_t", (DL_FUNC) cast_jl_value_t);
+
     return true;
 }
 

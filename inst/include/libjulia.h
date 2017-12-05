@@ -97,10 +97,18 @@ bool load_symbol(const std::string& name, void** ppSymbol) {
 
     last_loaded_symbol = name;
     *ppSymbol = NULL;
+
+#ifdef JULIAAPI_CPP
+
 #ifdef _WIN32
     *ppSymbol = (void*)::GetProcAddress((HINSTANCE) libjulia_t, name.c_str());
 #else
     *ppSymbol = ::dlsym(libjulia_t, name.c_str());
+#endif
+
+#else
+    *ppSymbol = (void*) R_GetCCallable("juliaapi", name.c_str());
+
 #endif
     if (*ppSymbol == NULL) {
         return false;
@@ -110,20 +118,29 @@ bool load_symbol(const std::string& name, void** ppSymbol) {
 }
 
 #ifdef JULIAAPI_CPP
+// when loaded internally
 
 #define LOAD_JULIA_SYMBOL_AS(name, as) \
 if (!load_symbol(#name, (void**) &as)) \
     return false;                      \
-R_RegisterCCallable("juliaapi", #name, (DL_FUNC) &as);
+R_RegisterCCallable("juliaapi", #name, (DL_FUNC) as);
 
 #define LOAD_JULIA_SYMBOL(name) \
 if (!load_symbol(#name, (void**) &name)) \
     return false;               \
-R_RegisterCCallable("juliaapi", #name, (DL_FUNC) &name);
+R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
 
 #else
 
-// TODO
+// when loaded externally
+
+#define LOAD_JULIA_SYMBOL_AS(name, as) \
+if (!load_symbol(#name, (void**) &as)) \
+    return false;
+
+#define LOAD_JULIA_SYMBOL(name) \
+if (!load_symbol(#name, (void**) &name)) \
+    return false;
 
 #endif
 

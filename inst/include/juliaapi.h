@@ -20,7 +20,7 @@ namespace Rcpp {
 // load externally
 #if defined(JULIAAPI_LOADING) && !defined(JULIAAPI_CPP)
 
-SEXP (*cast_xptr)(jl_value_t* s, bool preserve = true);
+SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
 jl_value_t* (*cast_jl_value_t)(SEXP s);
 
 namespace Rcpp {
@@ -35,8 +35,11 @@ namespace Rcpp {
 
 }
 
-namespace libjulia {
-
+void juliaapi_init() {
+    libjulia::load_symbol("cast_xptr", (void**) &cast_xptr);
+    libjulia::load_symbol("cast_jl_value_t", (void**) &cast_jl_value_t);
+    libjulia::load_symbols();
+    libjulia::load_constants();
 }
 
 #endif // load externally
