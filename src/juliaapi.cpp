@@ -1,7 +1,7 @@
 #define JULIAAPI_CPP
 #include "../inst/include/juliaapi_init.h"
 #include "../inst/include/juliaapi.h"
-#include "Rcpp.h"
+#include <Rcpp.h>
 
 using namespace Rcpp;
 
@@ -10,16 +10,16 @@ bool juliaapi_init(const std::string& libpath) {
     if (jl_main_module != NULL) {
         return true;
     }
-    if (!libjulia::load(libpath)) {
-        stop(libpath + " - " + libjulia::get_last_dl_error_message());
+    if (!load_julia(libpath)) {
+        stop(libpath + " - " + get_last_dl_error_message());
     }
-    if (!libjulia::load_symbols()) {
-        stop(libjulia::get_last_loaded_symbol() + " - " + libjulia::get_last_dl_error_message());
+    if (!load_julia_symbols()) {
+        stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
     }
 
     jl_init();
 
-    libjulia::load_constants();
+    load_julia_constants();
 
     R_RegisterCCallable("juliaapi", "cast_xptr", (DL_FUNC) cast_xptr);
     R_RegisterCCallable("juliaapi", "cast_jl_value_t", (DL_FUNC) cast_jl_value_t);

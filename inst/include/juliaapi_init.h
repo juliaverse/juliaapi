@@ -4,7 +4,7 @@
 #define JULIAAPI_INIT
 #include "julia.h"
 
-#include <RcppCommon.h>
+#include <Rcpp.h>
 
 #include <string>
 #ifndef _WIN32
@@ -14,21 +14,15 @@
 #include <windows.h>
 #endif
 
-namespace libjulia {
+static void* libjulia_t;
 
-void* libjulia_t;
+static std::string last_loaded_symbol;
 
-void* get_libjulia_t() {
-    return libjulia_t;
-}
-
-std::string last_loaded_symbol;
-
-std::string get_last_loaded_symbol() {
+static std::string get_last_loaded_symbol() {
     return last_loaded_symbol;
 }
 
-std::string get_last_dl_error_message() {
+static std::string get_last_dl_error_message() {
     std::string Error;
 #ifdef _WIN32
     LPVOID lpMsgBuf;
@@ -61,7 +55,7 @@ std::string get_last_dl_error_message() {
     return Error;
 }
 
-bool load(const std::string& libpath) {
+static bool load_julia(const std::string& libpath) {
     libjulia_t = NULL;
 #ifdef _WIN32
     libjulia_t = (void*)::LoadLibraryEx(libpath.c_str(), NULL, 0);
@@ -75,7 +69,7 @@ bool load(const std::string& libpath) {
     }
 }
 
-bool unload() {
+static bool unload_julia() {
   if (libjulia_t != NULL) {
 #ifdef _WIN32
     if (!::FreeLibrary((HMODULE)libjulia_t)) {
@@ -91,7 +85,7 @@ bool unload() {
     return true;
 }
 
-bool load_symbol(const std::string& name, void** ppSymbol) {
+static bool load_julia_symbol(const std::string& name, void** ppSymbol) {
 
     last_loaded_symbol = name;
     *ppSymbol = NULL;
@@ -119,12 +113,12 @@ bool load_symbol(const std::string& name, void** ppSymbol) {
 // when loaded internally
 
 #define LOAD_JULIA_SYMBOL_AS(name, as) \
-if (!load_symbol(#name, (void**) &as)) \
+if (!load_julia_symbol(#name, (void**) &as)) \
     return false;                      \
 R_RegisterCCallable("juliaapi", #name, (DL_FUNC) as);
 
 #define LOAD_JULIA_SYMBOL(name) \
-if (!load_symbol(#name, (void**) &name)) \
+if (!load_julia_symbol(#name, (void**) &name)) \
     return false;               \
 R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
 
@@ -133,16 +127,16 @@ R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
 // when loaded externally
 
 #define LOAD_JULIA_SYMBOL_AS(name, as) \
-if (!load_symbol(#name, (void**) &as)) \
+if (!load_julia_symbol(#name, (void**) &as)) \
     return false;
 
 #define LOAD_JULIA_SYMBOL(name) \
-if (!load_symbol(#name, (void**) &name)) \
+if (!load_julia_symbol(#name, (void**) &name)) \
     return false;
 
 #endif
 
-bool load_symbols() {
+bool load_julia_symbols() {
     LOAD_JULIA_SYMBOL(jl_get_ptls_states);
 
     LOAD_JULIA_SYMBOL(jl_typeof_str);
@@ -186,7 +180,7 @@ bool load_symbols() {
     return true;
 }
 
-bool load_constants() {
+bool load_julia_constants() {
     // not sure why LOAD_JULIA_SYMBOL fails
 
     jl_any_type = jl_eval_string("Any");
@@ -200,41 +194,41 @@ bool load_constants() {
     return true;
 }
 
-} // namespace julia
-
 
 #ifdef JULIAAPI_CPP
-// load internally
+    // load internally
 
-SEXP cast_xptr(jl_value_t* s, bool preserve);
-jl_value_t* cast_jl_value_t(SEXP s);
-void juliaapi_check_exception();
-void juliaapi_print(jl_value_t* t);
-SEXP juliaapi_eval_string(const char* str, bool preserve);
-void juliaapi_init();
+    SEXP cast_xptr(jl_value_t* s, bool preserve);
+    jl_value_t* cast_jl_value_t(SEXP s);
+    void juliaapi_check_exception();
+    void juliaapi_print(jl_value_t* t);
+    SEXP juliaapi_eval_string(const char* str, bool preserve);
+    void juliaapi_init();
 
 #else
-// load externally
+    // load externally
 
-SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
-jl_value_t* (*cast_jl_value_t)(SEXP s);
-void (*juliaapi_check_exception)();
-void (*juliaapi_print)(jl_value_t* t);
-SEXP (*juliaapi_eval_string)(const char* str, bool preserve);
+    SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
+    jl_value_t* (*cast_jl_value_t)(SEXP s);
+    void (*juliaapi_check_exception)();
+    void (*juliaapi_print)(jl_value_t* t);
+    SEXP (*juliaapi_eval_string)(const char* str, bool preserve);
 
-void juliaapi_init() {
-    libjulia::load_symbol("cast_xptr", (void**) &cast_xptr);
-    libjulia::load_symbol("cast_jl_value_t", (void**) &cast_jl_value_t);
+    void juliaapi_init() {
+        load_julia_symbol("cast_xptr", (void**) &cast_xptr);
+        load_julia_symbol("cast_jl_value_t", (void**) &cast_jl_value_t);
 
-    libjulia::load_symbol("juliaapi_check_exception", (void**) &juliaapi_check_exception);
-    libjulia::load_symbol("juliaapi_print", (void**) &juliaapi_print);
-    libjulia::load_symbol("juliaapi_eval_string", (void**) &juliaapi_eval_string);
+        load_julia_symbol("juliaapi_check_exception", (void**) &juliaapi_check_exception);
+        load_julia_symbol("juliaapi_print", (void**) &juliaapi_print);
+        load_julia_symbol("juliaapi_eval_string", (void**) &juliaapi_eval_string);
 
-    libjulia::load_symbols();
-    libjulia::load_constants();
-}
+        load_julia_symbols();
+        load_julia_constants();
+    }
 
 #endif
+
+#include <RcppCommon.h>
 
 namespace Rcpp {
 
