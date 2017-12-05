@@ -16,7 +16,7 @@ namespace Rcpp {
 #define JL_EXTERN
 #endif
 
-#ifdef JULIAAPI_CPP
+#ifdef JULIAAPI_INTERNAL
     // load internally
 
     void juliaapi_check_exception();

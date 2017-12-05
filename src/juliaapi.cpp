@@ -1,4 +1,5 @@
 #define JULIAAPI_CPP
+#define JULIAAPI_INTERNAL
 #define JULIAAPI_INIT
 #include "../inst/include/juliaapi.h"
 #include <Rcpp.h>
@@ -29,19 +30,6 @@ bool juliaapi_init(const std::string& libpath) {
     R_RegisterCCallable("juliaapi", "juliaapi_eval_string", (DL_FUNC) juliaapi_eval_string);
 
     return true;
-}
-
-// [[Rcpp::export]]
-void juliaapi_load_constants(Environment env) {
-    env["jl_any_type"] = cast_xptr(jl_any_type, false);
-
-    env["jl_nothing"] = cast_xptr(jl_nothing, false);
-    env["jl_true"] = cast_xptr(jl_true, false);
-    env["jl_false"] = cast_xptr(jl_false, false);
-
-    env["jl_main_module"] = cast_xptr(jl_main_module, false);
-    env["jl_core_module"] = cast_xptr(jl_core_module, false);
-    env["jl_base_module"] = cast_xptr(jl_base_module, false);
 }
 
 void juliaapi_check_exception() {

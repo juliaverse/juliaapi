@@ -18,16 +18,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// juliaapi_load_constants
-void juliaapi_load_constants(Environment env);
-RcppExport SEXP _juliaapi_juliaapi_load_constants(SEXP envSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Environment >::type env(envSEXP);
-    juliaapi_load_constants(env);
-    return R_NilValue;
-END_RCPP
-}
 // juliaapi_print
 void juliaapi_print(jl_value_t* t);
 RcppExport SEXP _juliaapi_juliaapi_print(SEXP tSEXP) {
@@ -124,10 +114,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// load_jl_value_xptr
+void load_jl_value_xptr(SEXP t, const std::string& name);
+RcppExport SEXP _juliaapi_load_jl_value_xptr(SEXP tSEXP, SEXP nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type name(nameSEXP);
+    load_jl_value_xptr(t, name);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_juliaapi_juliaapi_init", (DL_FUNC) &_juliaapi_juliaapi_init, 1},
-    {"_juliaapi_juliaapi_load_constants", (DL_FUNC) &_juliaapi_juliaapi_load_constants, 1},
     {"_juliaapi_juliaapi_print", (DL_FUNC) &_juliaapi_juliaapi_print, 1},
     {"_juliaapi_juliaapi_eval_string", (DL_FUNC) &_juliaapi_juliaapi_eval_string, 2},
     {"_juliaapi_juliaapi_get_function", (DL_FUNC) &_juliaapi_juliaapi_get_function, 2},
@@ -136,6 +136,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_juliaapi_juliaapi_call1", (DL_FUNC) &_juliaapi_juliaapi_call1, 2},
     {"_juliaapi_juliaapi_call2", (DL_FUNC) &_juliaapi_juliaapi_call2, 3},
     {"_juliaapi_juliaapi_call3", (DL_FUNC) &_juliaapi_juliaapi_call3, 4},
+    {"_juliaapi_load_jl_value_xptr", (DL_FUNC) &_juliaapi_load_jl_value_xptr, 2},
     {NULL, NULL, 0}
 };
 
