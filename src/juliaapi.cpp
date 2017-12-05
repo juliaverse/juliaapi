@@ -1,5 +1,5 @@
 #define JULIAAPI_CPP
-#define JULIAAPI_LOADING
+#include "../inst/include/juliaapi_init.h"
 #include "../inst/include/juliaapi.h"
 #include "Rcpp.h"
 
@@ -23,6 +23,7 @@ bool juliaapi_init(const std::string& libpath) {
 
     R_RegisterCCallable("juliaapi", "cast_xptr", (DL_FUNC) cast_xptr);
     R_RegisterCCallable("juliaapi", "cast_jl_value_t", (DL_FUNC) cast_jl_value_t);
+
     R_RegisterCCallable("juliaapi", "juliaapi_check_exception", (DL_FUNC) juliaapi_check_exception);
     R_RegisterCCallable("juliaapi", "juliaapi_print", (DL_FUNC) juliaapi_print);
     R_RegisterCCallable("juliaapi", "juliaapi_eval_string", (DL_FUNC) juliaapi_eval_string);
