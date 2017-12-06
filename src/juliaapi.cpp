@@ -38,6 +38,21 @@ bool juliaapi_init(const std::string& libpath) {
     return true;
 }
 
+// [[Rcpp::export]]
+bool juliaapi_is_null_xptr(SEXP t) {
+    if (TYPEOF(t) != EXTPTRSXP) {
+        stop("exptect an externalptr");
+    }
+    return R_ExternalPtrAddr(t) == nullptr;
+}
+
+// [[Rcpp::export]]
+void juliaapi_set_xptr(SEXP t, const std::string& name) {
+    void* p;
+    load_libjulia_constant(name, (void**) &p);
+    R_SetExternalPtrAddr(t, p);
+}
+
 void juliaapi_check_exception() {
     jl_value_t* exception = jl_exception_occurred();
     if (exception) {

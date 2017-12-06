@@ -18,6 +18,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// juliaapi_is_null_xptr
+bool juliaapi_is_null_xptr(SEXP t);
+RcppExport SEXP _juliaapi_juliaapi_is_null_xptr(SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_is_null_xptr(t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_set_xptr
+void juliaapi_set_xptr(SEXP t, const std::string& name);
+RcppExport SEXP _juliaapi_juliaapi_set_xptr(SEXP tSEXP, SEXP nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type name(nameSEXP);
+    juliaapi_set_xptr(t, name);
+    return R_NilValue;
+END_RCPP
+}
 // juliaapi_print
 void juliaapi_print(jl_value_t* t);
 RcppExport SEXP _juliaapi_juliaapi_print(SEXP tSEXP) {
@@ -114,20 +136,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// load_jl_value_xptr
-void load_jl_value_xptr(SEXP t, const std::string& name);
-RcppExport SEXP _juliaapi_load_jl_value_xptr(SEXP tSEXP, SEXP nameSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type t(tSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type name(nameSEXP);
-    load_jl_value_xptr(t, name);
-    return R_NilValue;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_juliaapi_juliaapi_init", (DL_FUNC) &_juliaapi_juliaapi_init, 1},
+    {"_juliaapi_juliaapi_is_null_xptr", (DL_FUNC) &_juliaapi_juliaapi_is_null_xptr, 1},
+    {"_juliaapi_juliaapi_set_xptr", (DL_FUNC) &_juliaapi_juliaapi_set_xptr, 2},
     {"_juliaapi_juliaapi_print", (DL_FUNC) &_juliaapi_juliaapi_print, 1},
     {"_juliaapi_juliaapi_eval_string", (DL_FUNC) &_juliaapi_juliaapi_eval_string, 2},
     {"_juliaapi_juliaapi_get_function", (DL_FUNC) &_juliaapi_juliaapi_get_function, 2},
@@ -136,7 +149,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_juliaapi_juliaapi_call1", (DL_FUNC) &_juliaapi_juliaapi_call1, 2},
     {"_juliaapi_juliaapi_call2", (DL_FUNC) &_juliaapi_juliaapi_call2, 3},
     {"_juliaapi_juliaapi_call3", (DL_FUNC) &_juliaapi_juliaapi_call3, 4},
-    {"_juliaapi_load_jl_value_xptr", (DL_FUNC) &_juliaapi_load_jl_value_xptr, 2},
     {NULL, NULL, 0}
 };
 

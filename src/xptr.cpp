@@ -85,20 +85,3 @@ SEXP cast_xptr(jl_value_t* s, bool preserve) {
 jl_value_t* cast_jl_value_t(SEXP s) {
     return (jl_value_t*) R_ExternalPtrAddr(s);
 }
-
-std::map<std::string, jl_value_t*> xptr_map() {
-    std::map<std::string, jl_value_t*> m;
-    m["jl_any_type"] = jl_any_type;
-    m["jl_nothing"] = jl_nothing;
-    m["jl_true"] = jl_true;
-    m["jl_false"] = jl_false;
-    m["jl_main_module"] = (jl_value_t*) jl_main_module;
-    m["jl_core_module"] = (jl_value_t*) jl_core_module;
-    m["jl_base_module"] = (jl_value_t*) jl_base_module;
-    return m;
-}
-// [[Rcpp::export]]
-void load_jl_value_xptr(SEXP t, const std::string& name) {
-    static std::map<std::string, jl_value_t*> m = xptr_map();
-    R_SetExternalPtrAddr(t, (void*) m[name]);
-}

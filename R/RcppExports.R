@@ -5,6 +5,14 @@ juliaapi_init <- function(libpath) {
     .Call('_juliaapi_juliaapi_init', PACKAGE = 'juliaapi', libpath)
 }
 
+juliaapi_is_null_xptr <- function(t) {
+    .Call('_juliaapi_juliaapi_is_null_xptr', PACKAGE = 'juliaapi', t)
+}
+
+juliaapi_set_xptr <- function(t, name) {
+    invisible(.Call('_juliaapi_juliaapi_set_xptr', PACKAGE = 'juliaapi', t, name))
+}
+
 juliaapi_print <- function(t) {
     invisible(.Call('_juliaapi_juliaapi_print', PACKAGE = 'juliaapi', t))
 }
@@ -42,9 +50,5 @@ jl_call2 <- function(f, a, b) {
 #' @export
 jl_call3 <- function(f, a, b, c) {
     .Call('_juliaapi_juliaapi_call3', PACKAGE = 'juliaapi', f, a, b, c)
-}
-
-load_jl_value_xptr <- function(t, name) {
-    invisible(.Call('_juliaapi_load_jl_value_xptr', PACKAGE = 'juliaapi', t, name))
 }
 
