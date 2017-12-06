@@ -6,6 +6,9 @@
 
 using namespace Rcpp;
 
+#define REGISTER_JULIAAPI_SYMBOL(name) \
+    R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
+
 // [[Rcpp::export]]
 bool juliaapi_init(const std::string& libpath) {
     if (jl_main_module != NULL) {
@@ -23,16 +26,14 @@ bool juliaapi_init(const std::string& libpath) {
     if (!load_libjulia_constants()) {
         stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
     }
+    REGISTER_JULIAAPI_SYMBOL(load_libjulia_symbol);
+    REGISTER_JULIAAPI_SYMBOL(load_libjulia_constant);
+    REGISTER_JULIAAPI_SYMBOL(cast_xptr);
+    REGISTER_JULIAAPI_SYMBOL(cast_jl_value_t);
 
-    R_RegisterCCallable("juliaapi", "load_libjulia_symbol", (DL_FUNC) load_libjulia_symbol);
-    R_RegisterCCallable("juliaapi", "load_libjulia_constant", (DL_FUNC) load_libjulia_constant);
-
-    R_RegisterCCallable("juliaapi", "cast_xptr", (DL_FUNC) cast_xptr);
-    R_RegisterCCallable("juliaapi", "cast_jl_value_t", (DL_FUNC) cast_jl_value_t);
-
-    R_RegisterCCallable("juliaapi", "juliaapi_check_exception", (DL_FUNC) juliaapi_check_exception);
-    R_RegisterCCallable("juliaapi", "juliaapi_print", (DL_FUNC) juliaapi_print);
-    R_RegisterCCallable("juliaapi", "juliaapi_eval_string", (DL_FUNC) juliaapi_eval_string);
+    REGISTER_JULIAAPI_SYMBOL(juliaapi_check_exception);
+    REGISTER_JULIAAPI_SYMBOL(juliaapi_print);
+    REGISTER_JULIAAPI_SYMBOL(juliaapi_eval_string);
 
     return true;
 }

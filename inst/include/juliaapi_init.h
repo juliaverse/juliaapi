@@ -208,27 +208,31 @@ bool load_libjulia_constants() {
 
     SEXP cast_xptr(jl_value_t* s, bool preserve);
     jl_value_t* cast_jl_value_t(SEXP s);
-    // void juliaapi_init();
+    void juliaapi_init();
 
 #else
     // load externally
+
+    SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
+    jl_value_t* (*cast_jl_value_t)(SEXP s);
+
 
     void load_juliaapi_symbol(const std::string& name, void** ppSymbol) {
         *ppSymbol = (void*) R_GetCCallable("juliaapi", name.c_str());
     }
 
-    SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
-    jl_value_t* (*cast_jl_value_t)(SEXP s);
+    #define LOAD_JULIAAPI_SYMBOL(name) load_juliaapi_symbol(#name, (void**) &name)
+
     void juliaapi_init() {
-        load_juliaapi_symbol("load_libjulia_symbol", (void**) &load_libjulia_symbol);
-        load_juliaapi_symbol("load_libjulia_constant", (void**) &load_libjulia_constant);
+        LOAD_JULIAAPI_SYMBOL(cast_xptr);
+        LOAD_JULIAAPI_SYMBOL(cast_jl_value_t);
 
-        load_juliaapi_symbol("cast_xptr", (void**) &cast_xptr);
-        load_juliaapi_symbol("cast_jl_value_t", (void**) &cast_jl_value_t);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_check_exception);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_print);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_eval_string);
 
-        load_juliaapi_symbol("juliaapi_check_exception", (void**) &juliaapi_check_exception);
-        load_juliaapi_symbol("juliaapi_print", (void**) &juliaapi_print);
-        load_juliaapi_symbol("juliaapi_eval_string", (void**) &juliaapi_eval_string);
+        LOAD_JULIAAPI_SYMBOL(load_libjulia_symbol);
+        LOAD_JULIAAPI_SYMBOL(load_libjulia_constant);
 
         load_libjulia_symbols();
         load_libjulia_constants();
