@@ -18,11 +18,11 @@ static void* libjulia_t;
 
 static std::string last_loaded_symbol;
 
-static std::string get_last_loaded_symbol() {
+std::string get_last_loaded_symbol() {
     return last_loaded_symbol;
 }
 
-static std::string get_last_dl_error_message() {
+std::string get_last_dl_error_message() {
     std::string Error;
 #ifdef _WIN32
     LPVOID lpMsgBuf;
@@ -55,7 +55,7 @@ static std::string get_last_dl_error_message() {
     return Error;
 }
 
-static bool load_julia(const std::string& libpath) {
+bool load_libjulia(const std::string& libpath) {
     libjulia_t = NULL;
 #ifdef _WIN32
     libjulia_t = (void*)::LoadLibraryEx(libpath.c_str(), NULL, 0);
@@ -69,7 +69,7 @@ static bool load_julia(const std::string& libpath) {
     }
 }
 
-static bool unload_julia() {
+bool unload_libjulia() {
   if (libjulia_t != NULL) {
 #ifdef _WIN32
     if (!::FreeLibrary((HMODULE)libjulia_t)) {
@@ -85,23 +85,19 @@ static bool unload_julia() {
     return true;
 }
 
-static bool load_julia_symbol(const std::string& name, void** ppSymbol) {
+#ifdef JULIAAPI_INTERNAL
+
+bool load_libjulia_symbol(const std::string& name, void** ppSymbol) {
 
     last_loaded_symbol = name;
     *ppSymbol = NULL;
 
-#ifdef JULIAAPI_CPP
-
 #ifdef _WIN32
-    *ppSymbol = (void*)::GetProcAddress((HINSTANCE) libjulia_t, name.c_str());
+    *ppSymbol = (void*) GetProcAddress((HINSTANCE) libjulia_t, name.c_str());
 #else
-    *ppSymbol = ::dlsym(libjulia_t, name.c_str());
+    *ppSymbol = dlsym(libjulia_t, name.c_str());
 #endif
 
-#else
-    *ppSymbol = (void*) R_GetCCallable("juliaapi", name.c_str());
-
-#endif
     if (*ppSymbol == NULL) {
         return false;
     } else {
@@ -109,114 +105,133 @@ static bool load_julia_symbol(const std::string& name, void** ppSymbol) {
     }
 }
 
-#ifdef JULIAAPI_CPP
-// when loaded internally
+bool load_libjulia_constant(const std::string& name, void** ppSymbol) {
 
-#define LOAD_JULIA_SYMBOL_AS(name, as) \
-if (!load_julia_symbol(#name, (void**) &as)) \
-    return false;                      \
-R_RegisterCCallable("juliaapi", #name, (DL_FUNC) as);
+    last_loaded_symbol = name;
+    *ppSymbol = NULL;
 
-#define LOAD_JULIA_SYMBOL(name) \
-if (!load_julia_symbol(#name, (void**) &name)) \
-    return false;               \
-R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
+#ifdef _WIN32
+    *ppSymbol = *((void**) GetProcAddress((HINSTANCE) libjulia_t, name.c_str()));
+#else
+    *ppSymbol = *((void**) dlsym(libjulia_t, name.c_str()));
+#endif
+
+    if (*ppSymbol == NULL) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 #else
 
-// when loaded externally
-
-#define LOAD_JULIA_SYMBOL_AS(name, as) \
-if (!load_julia_symbol(#name, (void**) &as)) \
-    return false;
-
-#define LOAD_JULIA_SYMBOL(name) \
-if (!load_julia_symbol(#name, (void**) &name)) \
-    return false;
+bool (*load_libjulia_symbol)(const std::string& name, void** ppSymbol);
+bool (*load_libjulia_constant)(const std::string& name, void** ppSymbol);
 
 #endif
 
-bool load_julia_symbols() {
-    LOAD_JULIA_SYMBOL(jl_get_ptls_states);
+#define LOAD_LIBJULIA_SYMBOL_AS(name, as) \
+if (!load_libjulia_symbol(#name, (void**) &as)) \
+    return false;
 
-    LOAD_JULIA_SYMBOL(jl_typeof_str);
+#define LOAD_LIBJULIA_SYMBOL(name) \
+if (!load_libjulia_symbol(#name, (void**) &name)) \
+    return false;
 
-    LOAD_JULIA_SYMBOL(jl_symbol);
-    LOAD_JULIA_SYMBOL(jl_box_voidpointer);
-    LOAD_JULIA_SYMBOL(jl_unbox_voidpointer);
 
-    LOAD_JULIA_SYMBOL(jl_alloc_array_1d);
-    LOAD_JULIA_SYMBOL(jl_apply_array_type);
-    LOAD_JULIA_SYMBOL(jl_arrayset);
-    LOAD_JULIA_SYMBOL(jl_arrayunset);
-    LOAD_JULIA_SYMBOL(jl_array_grow_end);
+bool load_libjulia_symbols() {
+    LOAD_LIBJULIA_SYMBOL(jl_get_ptls_states);
 
-    LOAD_JULIA_SYMBOL(jl_new_module);
-    LOAD_JULIA_SYMBOL(jl_get_global);
-    LOAD_JULIA_SYMBOL(jl_set_global);
-    LOAD_JULIA_SYMBOL(jl_set_const);
+    LOAD_LIBJULIA_SYMBOL(jl_typeof_str);
 
-    LOAD_JULIA_SYMBOL(jl_is_initialized);
-    LOAD_JULIA_SYMBOL(jl_init);
-    LOAD_JULIA_SYMBOL(jl_atexit_hook);
-    LOAD_JULIA_SYMBOL(jl_eval_string);
+    LOAD_LIBJULIA_SYMBOL(jl_symbol);
+    LOAD_LIBJULIA_SYMBOL(jl_box_voidpointer);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_voidpointer);
 
-    LOAD_JULIA_SYMBOL(jl_exception_occurred);
+    LOAD_LIBJULIA_SYMBOL(jl_alloc_array_1d);
+    LOAD_LIBJULIA_SYMBOL(jl_apply_array_type);
+    LOAD_LIBJULIA_SYMBOL(jl_arrayset);
+    LOAD_LIBJULIA_SYMBOL(jl_arrayunset);
+    LOAD_LIBJULIA_SYMBOL(jl_array_grow_end);
 
-    LOAD_JULIA_SYMBOL(jl_call);
-    LOAD_JULIA_SYMBOL(jl_call0);
-    LOAD_JULIA_SYMBOL(jl_call1);
-    LOAD_JULIA_SYMBOL(jl_call2);
-    LOAD_JULIA_SYMBOL(jl_call3);
+    LOAD_LIBJULIA_SYMBOL(jl_new_module);
+    LOAD_LIBJULIA_SYMBOL(jl_get_global);
+    LOAD_LIBJULIA_SYMBOL(jl_set_global);
+    LOAD_LIBJULIA_SYMBOL(jl_set_const);
 
-    LOAD_JULIA_SYMBOL(jl_stdout_stream);
-    LOAD_JULIA_SYMBOL(jl_stdin_stream);
-    LOAD_JULIA_SYMBOL(jl_stderr_stream);
-    LOAD_JULIA_SYMBOL(jl_printf);
-    LOAD_JULIA_SYMBOL(jl_flush_cstdio);
-    LOAD_JULIA_SYMBOL(jl_stdout_obj);
-    LOAD_JULIA_SYMBOL(jl_stderr_obj);
+    LOAD_LIBJULIA_SYMBOL(jl_is_initialized);
+    LOAD_LIBJULIA_SYMBOL(jl_init);
+    LOAD_LIBJULIA_SYMBOL(jl_atexit_hook);
+    LOAD_LIBJULIA_SYMBOL(jl_eval_string);
+
+    LOAD_LIBJULIA_SYMBOL(jl_exception_occurred);
+
+    LOAD_LIBJULIA_SYMBOL(jl_call);
+    LOAD_LIBJULIA_SYMBOL(jl_call0);
+    LOAD_LIBJULIA_SYMBOL(jl_call1);
+    LOAD_LIBJULIA_SYMBOL(jl_call2);
+    LOAD_LIBJULIA_SYMBOL(jl_call3);
+
+    LOAD_LIBJULIA_SYMBOL(jl_stdout_stream);
+    LOAD_LIBJULIA_SYMBOL(jl_stdin_stream);
+    LOAD_LIBJULIA_SYMBOL(jl_stderr_stream);
+    LOAD_LIBJULIA_SYMBOL(jl_printf);
+    LOAD_LIBJULIA_SYMBOL(jl_flush_cstdio);
+    LOAD_LIBJULIA_SYMBOL(jl_stdout_obj);
+    LOAD_LIBJULIA_SYMBOL(jl_stderr_obj);
 
     return true;
 }
 
-bool load_julia_constants() {
-    // not sure why LOAD_JULIA_SYMBOL fails
+#define LOAD_LIBJULIA_CONSTANT_AS(name, as) \
+if (!load_libjulia_constant(#name, (void**) &as)) \
+    return false;
 
-    jl_any_type = jl_eval_string("Any");
-    jl_true = jl_eval_string("true");
-    jl_false = jl_eval_string("false");
-    jl_nothing = jl_eval_string("nothing");
+#define LOAD_LIBJULIA_CONSTANT(name) \
+if (!load_libjulia_constant(#name, (void**) &name)) \
+    return false;
 
-    jl_main_module = (jl_module_t*) jl_eval_string("Main");
-    jl_core_module = (jl_module_t*) jl_eval_string("Core");
-    jl_base_module = (jl_module_t*) jl_eval_string("Base");
+bool load_libjulia_constants() {
+    LOAD_LIBJULIA_CONSTANT(jl_any_type);
+    LOAD_LIBJULIA_CONSTANT(jl_nothing);
+    LOAD_LIBJULIA_CONSTANT(jl_true);
+    LOAD_LIBJULIA_CONSTANT(jl_false);
+    LOAD_LIBJULIA_CONSTANT(jl_main_module);
+    LOAD_LIBJULIA_CONSTANT(jl_core_module);
+    LOAD_LIBJULIA_CONSTANT(jl_base_module);
     return true;
 }
 
 
-#ifdef JULIAAPI_CPP
+#ifdef JULIAAPI_INTERNAL
     // load internally
 
     SEXP cast_xptr(jl_value_t* s, bool preserve);
     jl_value_t* cast_jl_value_t(SEXP s);
-    void juliaapi_init();
+    // void juliaapi_init();
 
 #else
     // load externally
 
+    void load_juliaapi_symbol(const std::string& name, void** ppSymbol) {
+        *ppSymbol = (void*) R_GetCCallable("juliaapi", name.c_str());
+    }
+
     SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
     jl_value_t* (*cast_jl_value_t)(SEXP s);
     void juliaapi_init() {
-        load_julia_symbol("cast_xptr", (void**) &cast_xptr);
-        load_julia_symbol("cast_jl_value_t", (void**) &cast_jl_value_t);
+        load_juliaapi_symbol("load_libjulia_symbol", (void**) &load_libjulia_symbol);
+        load_juliaapi_symbol("load_libjulia_constant", (void**) &load_libjulia_constant);
 
-        load_julia_symbol("juliaapi_check_exception", (void**) &juliaapi_check_exception);
-        load_julia_symbol("juliaapi_print", (void**) &juliaapi_print);
-        load_julia_symbol("juliaapi_eval_string", (void**) &juliaapi_eval_string);
+        load_juliaapi_symbol("cast_xptr", (void**) &cast_xptr);
+        load_juliaapi_symbol("cast_jl_value_t", (void**) &cast_jl_value_t);
 
-        load_julia_symbols();
-        load_julia_constants();
+        load_juliaapi_symbol("juliaapi_check_exception", (void**) &juliaapi_check_exception);
+        load_juliaapi_symbol("juliaapi_print", (void**) &juliaapi_print);
+        load_juliaapi_symbol("juliaapi_eval_string", (void**) &juliaapi_eval_string);
+
+        load_libjulia_symbols();
+        load_libjulia_constants();
     }
 
 #endif

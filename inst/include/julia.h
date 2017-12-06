@@ -28,7 +28,7 @@
 typedef struct _jl_value_t jl_value_t;
 
 typedef jl_value_t jl_function_t;
-typedef jl_value_t jl_sym_t;
+typedef struct _jl_sym_t jl_sym_t;
 
 typedef struct {
     /*
@@ -65,7 +65,10 @@ typedef struct {
 
     // followed by alignment padding and inline data, or owner pointer
 } jl_array_t;
-typedef jl_value_t jl_module_t;
+
+typedef struct _jl_datatype_t jl_datatype_t;
+typedef struct _jl_module_t jl_module_t;
+typedef struct _jl_datatype_t jl_datatype_t;
 typedef struct uv_stream_s uv_stream_t;
 
 // gc
@@ -99,6 +102,26 @@ JL_EXTERN jl_tls_states_t* (*jl_get_ptls_states)(void);
 
 // constants
 JL_EXTERN jl_value_t* jl_any_type;
+
+JL_EXTERN jl_datatype_t* jl_bool_type;
+JL_EXTERN jl_datatype_t* jl_char_type;
+JL_EXTERN jl_datatype_t* jl_int8_type;
+JL_EXTERN jl_datatype_t* jl_uint8_type;
+JL_EXTERN jl_datatype_t* jl_int16_type;
+JL_EXTERN jl_datatype_t* jl_uint16_type;
+JL_EXTERN jl_datatype_t* jl_int32_type;
+JL_EXTERN jl_datatype_t* jl_uint32_type;
+JL_EXTERN jl_datatype_t* jl_int64_type;
+JL_EXTERN jl_datatype_t* jl_uint64_type;
+JL_EXTERN jl_datatype_t* jl_float16_type;
+JL_EXTERN jl_datatype_t* jl_float32_type;
+JL_EXTERN jl_datatype_t* jl_float64_type;
+JL_EXTERN jl_datatype_t* jl_floatingpoint_type;
+JL_EXTERN jl_datatype_t* jl_number_type;
+JL_EXTERN jl_datatype_t* jl_void_type;
+JL_EXTERN jl_datatype_t* jl_signed_type;
+JL_EXTERN jl_datatype_t* jl_voidpointer_type;
+
 JL_EXTERN jl_value_t* jl_true;
 JL_EXTERN jl_value_t* jl_false;
 JL_EXTERN jl_value_t* jl_nothing;

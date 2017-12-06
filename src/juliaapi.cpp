@@ -11,16 +11,21 @@ bool juliaapi_init(const std::string& libpath) {
     if (jl_main_module != NULL) {
         return true;
     }
-    if (!load_julia(libpath)) {
+    if (!load_libjulia(libpath)) {
         stop(libpath + " - " + get_last_dl_error_message());
     }
-    if (!load_julia_symbols()) {
+    if (!load_libjulia_symbols()) {
         stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
     }
 
     jl_init();
 
-    load_julia_constants();
+    if (!load_libjulia_constants()) {
+        stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
+    }
+
+    R_RegisterCCallable("juliaapi", "load_libjulia_symbol", (DL_FUNC) load_libjulia_symbol);
+    R_RegisterCCallable("juliaapi", "load_libjulia_constant", (DL_FUNC) load_libjulia_constant);
 
     R_RegisterCCallable("juliaapi", "cast_xptr", (DL_FUNC) cast_xptr);
     R_RegisterCCallable("juliaapi", "cast_jl_value_t", (DL_FUNC) cast_jl_value_t);
@@ -62,7 +67,7 @@ SEXP juliaapi_eval_string(const char* str, bool preserve = true) {
 //' @export
 // [[Rcpp::export(jl_get_function)]]
 SEXP juliaapi_get_function(jl_value_t* module, const char* str) {
-    jl_function_t* f = jl_get_function(module, str);
+    jl_function_t* f = jl_get_function((jl_module_t*) module, str);
     if (f == nullptr) {
         stop("function not found in module.");
     }
