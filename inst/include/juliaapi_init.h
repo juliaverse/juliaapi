@@ -199,6 +199,24 @@ bool load_libjulia_constants() {
     LOAD_LIBJULIA_CONSTANT(jl_main_module);
     LOAD_LIBJULIA_CONSTANT(jl_core_module);
     LOAD_LIBJULIA_CONSTANT(jl_base_module);
+    LOAD_LIBJULIA_CONSTANT(jl_bool_type);
+    LOAD_LIBJULIA_CONSTANT(jl_char_type);
+    LOAD_LIBJULIA_CONSTANT(jl_int8_type);
+    LOAD_LIBJULIA_CONSTANT(jl_uint8_type);
+    LOAD_LIBJULIA_CONSTANT(jl_int16_type);
+    LOAD_LIBJULIA_CONSTANT(jl_uint16_type);
+    LOAD_LIBJULIA_CONSTANT(jl_int32_type);
+    LOAD_LIBJULIA_CONSTANT(jl_uint32_type);
+    LOAD_LIBJULIA_CONSTANT(jl_int64_type);
+    LOAD_LIBJULIA_CONSTANT(jl_uint64_type);
+    LOAD_LIBJULIA_CONSTANT(jl_float16_type);
+    LOAD_LIBJULIA_CONSTANT(jl_float32_type);
+    LOAD_LIBJULIA_CONSTANT(jl_float64_type);
+    LOAD_LIBJULIA_CONSTANT(jl_floatingpoint_type);
+    LOAD_LIBJULIA_CONSTANT(jl_number_type);
+    LOAD_LIBJULIA_CONSTANT(jl_void_type);
+    LOAD_LIBJULIA_CONSTANT(jl_signed_type);
+    LOAD_LIBJULIA_CONSTANT(jl_voidpointer_type);
     return true;
 }
 

@@ -7,6 +7,16 @@
 
 using namespace Rcpp;
 
+// juliaapi_is_initialized
+bool juliaapi_is_initialized();
+RcppExport SEXP _juliaapi_juliaapi_is_initialized() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(juliaapi_is_initialized());
+    return rcpp_result_gen;
+END_RCPP
+}
 // juliaapi_init
 bool juliaapi_init(const std::string& libpath);
 RcppExport SEXP _juliaapi_juliaapi_init(SEXP libpathSEXP) {
@@ -138,6 +148,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_juliaapi_juliaapi_is_initialized", (DL_FUNC) &_juliaapi_juliaapi_is_initialized, 0},
     {"_juliaapi_juliaapi_init", (DL_FUNC) &_juliaapi_juliaapi_init, 1},
     {"_juliaapi_juliaapi_is_null_xptr", (DL_FUNC) &_juliaapi_juliaapi_is_null_xptr, 1},
     {"_juliaapi_juliaapi_set_xptr", (DL_FUNC) &_juliaapi_juliaapi_set_xptr, 2},

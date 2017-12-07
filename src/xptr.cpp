@@ -2,8 +2,7 @@
 #include <stack>
 #include <map>
 #include <string>
-#include <R.h>
-#include <Rinternals.h>
+#include <Rcpp.h>
 
 std::map<jl_value_t*, std::pair<size_t, size_t> > gc_index_map;
 std::stack<size_t> gc_free_stack;
@@ -55,7 +54,7 @@ void gc_release(jl_value_t* s) {
     std::map<jl_value_t*, std::pair<size_t, size_t> >::iterator it;
     it = gc_index_map.find(s);
     if(it == gc_index_map.end()) {
-        error("trying to release an unprotected julia object.");
+        Rcpp::stop("trying to release an unprotected julia object.");
     } else {
         it->second.second -= 1;
         if(it->second.second == 0) {
@@ -72,16 +71,19 @@ void xptr_finalizer(SEXP s) {
 
 SEXP cast_xptr(jl_value_t* s, bool preserve) {
     SEXP sp;
+    sp = PROTECT(R_MakeExternalPtr((void*) s, R_NilValue, R_NilValue));
     if (preserve) {
         gc_preserve(s);
+        R_RegisterCFinalizerEx(sp, &xptr_finalizer, (Rboolean) 0);
     }
-    sp = PROTECT(R_MakeExternalPtr((void*) s, R_NilValue, R_NilValue));
-    R_RegisterCFinalizerEx(sp, &xptr_finalizer, (Rboolean) 0);
     Rf_setAttrib(sp, R_ClassSymbol, Rf_mkString("jl_value"));
     UNPROTECT(1);
     return sp;
 }
 
 jl_value_t* cast_jl_value_t(SEXP s) {
+    if (TYPEOF(s) != EXTPTRSXP) {
+        Rcpp::stop("exptect an externalptr");
+    }
     return (jl_value_t*) R_ExternalPtrAddr(s);
 }
