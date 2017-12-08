@@ -79,19 +79,7 @@ jl_set_xptr <- function(t, name) {
 }
 
 #' @export
-jl_is_initialized <- function() {
-    .Call('_juliaapi_juliaapi_is_initialized', PACKAGE = 'juliaapi')
-}
-
-#' @export
-jl_show <- function(t) {
-    invisible(.Call('_juliaapi_juliaapi_show', PACKAGE = 'juliaapi', t))
-}
-
-#' @export
-jl_check_exception <- function() {
-    invisible(.Call('_juliaapi_juliaapi_check_exception', PACKAGE = 'juliaapi'))
-}
+NULL
 
 #' @export
 jl_eval_string <- function(str) {
@@ -105,11 +93,6 @@ jl_exception_occurred <- function() {
 #' @export
 jl_get_function <- function(module, str) {
     .Call('_juliaapi_juliaapi_get_function', PACKAGE = 'juliaapi', module, str)
-}
-
-#' @export
-jl_call <- function(f, args, nargs) {
-    .Call('_juliaapi_juliaapi_call', PACKAGE = 'juliaapi', f, args, nargs)
 }
 
 #' @export
@@ -133,7 +116,102 @@ jl_call3 <- function(f, a, b, c) {
 }
 
 #' @export
+jl_isa <- function(a, t) {
+    .Call('_juliaapi_juliaapi_isa', PACKAGE = 'juliaapi', a, t)
+}
+
+#' @export
+jl_types_equal <- function(a, b) {
+    .Call('_juliaapi_juliaapi_types_equal', PACKAGE = 'juliaapi', a, b)
+}
+
+#' @export
+jl_typename_str <- function(v) {
+    .Call('_juliaapi_juliaapi_typename_str', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_typeof_str <- function(v) {
+    .Call('_juliaapi_juliaapi_typeof_str', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
 jl_symbol <- function(str) {
     .Call('_juliaapi_juliaapi_symbol', PACKAGE = 'juliaapi', str)
+}
+
+#' @export
+jl_unbox_bool <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_bool', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_int8 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_int8', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_uint8 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_uint8', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_int16 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_int16', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_uint16 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_uint16', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_int32 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_int32', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_uint32 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_uint32', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_int64 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_int64', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_uint64 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_uint64', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_float32 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_float32', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_float64 <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_float64', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_unbox_voidpointer <- function(v) {
+    .Call('_juliaapi_juliaapi_unbox_voidpointer', PACKAGE = 'juliaapi', v)
+}
+
+#' @export
+jl_is_initialized <- function() {
+    .Call('_juliaapi_juliaapi_is_initialized', PACKAGE = 'juliaapi')
+}
+
+#' @export
+jl_show <- function(t) {
+    invisible(.Call('_juliaapi_juliaapi_show', PACKAGE = 'juliaapi', t))
+}
+
+#' @export
+jl_check_exception <- function() {
+    invisible(.Call('_juliaapi_juliaapi_check_exception', PACKAGE = 'juliaapi'))
 }
 

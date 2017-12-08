@@ -29,6 +29,7 @@ typedef struct _jl_value_t jl_value_t;
 
 typedef jl_value_t jl_function_t;
 typedef struct _jl_sym_t jl_sym_t;
+typedef struct _jl_svec_t jl_svec_t;
 
 typedef struct {
     /*
@@ -136,6 +137,9 @@ JL_EXTERN jl_value_t* jl_nothing;
 
 
 // type predicates and basic operations
+JL_EXTERN int (*jl_isa)(jl_value_t *a, jl_value_t *t);
+JL_EXTERN int (*jl_types_equal)(jl_value_t *a, jl_value_t *b);
+JL_EXTERN const char* (*jl_typename_str)(jl_value_t *v);
 JL_EXTERN const char* (*jl_typeof_str)(jl_value_t *v);
 
 // constructors

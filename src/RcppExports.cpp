@@ -183,35 +183,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// juliaapi_is_initialized
-bool juliaapi_is_initialized();
-RcppExport SEXP _juliaapi_juliaapi_is_initialized() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(juliaapi_is_initialized());
-    return rcpp_result_gen;
-END_RCPP
-}
-// juliaapi_show
-void juliaapi_show(jl_value_t* t);
-RcppExport SEXP _juliaapi_juliaapi_show(SEXP tSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< jl_value_t* >::type t(tSEXP);
-    juliaapi_show(t);
-    return R_NilValue;
-END_RCPP
-}
-// juliaapi_check_exception
-void juliaapi_check_exception();
-RcppExport SEXP _juliaapi_juliaapi_check_exception() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    juliaapi_check_exception();
-    return R_NilValue;
-END_RCPP
-}
 // juliaapi_eval_string
 jl_value_t* juliaapi_eval_string(const char* str);
 RcppExport SEXP _juliaapi_juliaapi_eval_string(SEXP strSEXP) {
@@ -242,19 +213,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< jl_value_t* >::type module(moduleSEXP);
     Rcpp::traits::input_parameter< const char* >::type str(strSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_get_function(module, str));
-    return rcpp_result_gen;
-END_RCPP
-}
-// juliaapi_call
-jl_value_t* juliaapi_call(jl_value_t* f, List args, int32_t nargs);
-RcppExport SEXP _juliaapi_juliaapi_call(SEXP fSEXP, SEXP argsSEXP, SEXP nargsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< jl_value_t* >::type f(fSEXP);
-    Rcpp::traits::input_parameter< List >::type args(argsSEXP);
-    Rcpp::traits::input_parameter< int32_t >::type nargs(nargsSEXP);
-    rcpp_result_gen = Rcpp::wrap(juliaapi_call(f, args, nargs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -308,6 +266,52 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// juliaapi_isa
+int juliaapi_isa(jl_value_t* a, jl_value_t* t);
+RcppExport SEXP _juliaapi_juliaapi_isa(SEXP aSEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type a(aSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_isa(a, t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_types_equal
+int juliaapi_types_equal(jl_value_t* a, jl_value_t* b);
+RcppExport SEXP _juliaapi_juliaapi_types_equal(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type a(aSEXP);
+    Rcpp::traits::input_parameter< jl_value_t* >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_types_equal(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_typename_str
+const char* juliaapi_typename_str(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_typename_str(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_typename_str(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_typeof_str
+const char* juliaapi_typeof_str(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_typeof_str(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_typeof_str(v));
+    return rcpp_result_gen;
+END_RCPP
+}
 // juliaapi_symbol
 jl_value_t* juliaapi_symbol(const char* str);
 RcppExport SEXP _juliaapi_juliaapi_symbol(SEXP strSEXP) {
@@ -317,6 +321,167 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const char* >::type str(strSEXP);
     rcpp_result_gen = Rcpp::wrap(juliaapi_symbol(str));
     return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_bool
+bool juliaapi_unbox_bool(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_bool(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_bool(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_int8
+int juliaapi_unbox_int8(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_int8(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_int8(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_uint8
+int juliaapi_unbox_uint8(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_uint8(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_uint8(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_int16
+int juliaapi_unbox_int16(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_int16(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_int16(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_uint16
+int juliaapi_unbox_uint16(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_uint16(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_uint16(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_int32
+int juliaapi_unbox_int32(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_int32(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_int32(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_uint32
+int juliaapi_unbox_uint32(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_uint32(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_uint32(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_int64
+int juliaapi_unbox_int64(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_int64(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_int64(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_uint64
+int juliaapi_unbox_uint64(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_uint64(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_uint64(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_float32
+double juliaapi_unbox_float32(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_float32(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_float32(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_float64
+double juliaapi_unbox_float64(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_float64(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_float64(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_unbox_voidpointer
+SEXP juliaapi_unbox_voidpointer(jl_value_t* v);
+RcppExport SEXP _juliaapi_juliaapi_unbox_voidpointer(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(juliaapi_unbox_voidpointer(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_is_initialized
+bool juliaapi_is_initialized();
+RcppExport SEXP _juliaapi_juliaapi_is_initialized() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(juliaapi_is_initialized());
+    return rcpp_result_gen;
+END_RCPP
+}
+// juliaapi_show
+void juliaapi_show(jl_value_t* t);
+RcppExport SEXP _juliaapi_juliaapi_show(SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< jl_value_t* >::type t(tSEXP);
+    juliaapi_show(t);
+    return R_NilValue;
+END_RCPP
+}
+// juliaapi_check_exception
+void juliaapi_check_exception();
+RcppExport SEXP _juliaapi_juliaapi_check_exception() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    juliaapi_check_exception();
+    return R_NilValue;
 END_RCPP
 }
 
@@ -337,18 +502,33 @@ static const R_CallMethodDef CallEntries[] = {
     {"_juliaapi_juliaapi_init", (DL_FUNC) &_juliaapi_juliaapi_init, 1},
     {"_juliaapi_jl_is_null_xptr", (DL_FUNC) &_juliaapi_jl_is_null_xptr, 1},
     {"_juliaapi_jl_set_xptr", (DL_FUNC) &_juliaapi_jl_set_xptr, 2},
-    {"_juliaapi_juliaapi_is_initialized", (DL_FUNC) &_juliaapi_juliaapi_is_initialized, 0},
-    {"_juliaapi_juliaapi_show", (DL_FUNC) &_juliaapi_juliaapi_show, 1},
-    {"_juliaapi_juliaapi_check_exception", (DL_FUNC) &_juliaapi_juliaapi_check_exception, 0},
     {"_juliaapi_juliaapi_eval_string", (DL_FUNC) &_juliaapi_juliaapi_eval_string, 1},
     {"_juliaapi_julia_exception_occurred", (DL_FUNC) &_juliaapi_julia_exception_occurred, 0},
     {"_juliaapi_juliaapi_get_function", (DL_FUNC) &_juliaapi_juliaapi_get_function, 2},
-    {"_juliaapi_juliaapi_call", (DL_FUNC) &_juliaapi_juliaapi_call, 3},
     {"_juliaapi_juliaapi_call0", (DL_FUNC) &_juliaapi_juliaapi_call0, 1},
     {"_juliaapi_juliaapi_call1", (DL_FUNC) &_juliaapi_juliaapi_call1, 2},
     {"_juliaapi_jualiapi_call2", (DL_FUNC) &_juliaapi_jualiapi_call2, 3},
     {"_juliaapi_jualiapi_call3", (DL_FUNC) &_juliaapi_jualiapi_call3, 4},
+    {"_juliaapi_juliaapi_isa", (DL_FUNC) &_juliaapi_juliaapi_isa, 2},
+    {"_juliaapi_juliaapi_types_equal", (DL_FUNC) &_juliaapi_juliaapi_types_equal, 2},
+    {"_juliaapi_juliaapi_typename_str", (DL_FUNC) &_juliaapi_juliaapi_typename_str, 1},
+    {"_juliaapi_juliaapi_typeof_str", (DL_FUNC) &_juliaapi_juliaapi_typeof_str, 1},
     {"_juliaapi_juliaapi_symbol", (DL_FUNC) &_juliaapi_juliaapi_symbol, 1},
+    {"_juliaapi_juliaapi_unbox_bool", (DL_FUNC) &_juliaapi_juliaapi_unbox_bool, 1},
+    {"_juliaapi_juliaapi_unbox_int8", (DL_FUNC) &_juliaapi_juliaapi_unbox_int8, 1},
+    {"_juliaapi_juliaapi_unbox_uint8", (DL_FUNC) &_juliaapi_juliaapi_unbox_uint8, 1},
+    {"_juliaapi_juliaapi_unbox_int16", (DL_FUNC) &_juliaapi_juliaapi_unbox_int16, 1},
+    {"_juliaapi_juliaapi_unbox_uint16", (DL_FUNC) &_juliaapi_juliaapi_unbox_uint16, 1},
+    {"_juliaapi_juliaapi_unbox_int32", (DL_FUNC) &_juliaapi_juliaapi_unbox_int32, 1},
+    {"_juliaapi_juliaapi_unbox_uint32", (DL_FUNC) &_juliaapi_juliaapi_unbox_uint32, 1},
+    {"_juliaapi_juliaapi_unbox_int64", (DL_FUNC) &_juliaapi_juliaapi_unbox_int64, 1},
+    {"_juliaapi_juliaapi_unbox_uint64", (DL_FUNC) &_juliaapi_juliaapi_unbox_uint64, 1},
+    {"_juliaapi_juliaapi_unbox_float32", (DL_FUNC) &_juliaapi_juliaapi_unbox_float32, 1},
+    {"_juliaapi_juliaapi_unbox_float64", (DL_FUNC) &_juliaapi_juliaapi_unbox_float64, 1},
+    {"_juliaapi_juliaapi_unbox_voidpointer", (DL_FUNC) &_juliaapi_juliaapi_unbox_voidpointer, 1},
+    {"_juliaapi_juliaapi_is_initialized", (DL_FUNC) &_juliaapi_juliaapi_is_initialized, 0},
+    {"_juliaapi_juliaapi_show", (DL_FUNC) &_juliaapi_juliaapi_show, 1},
+    {"_juliaapi_juliaapi_check_exception", (DL_FUNC) &_juliaapi_juliaapi_check_exception, 0},
     {NULL, NULL, 0}
 };
 

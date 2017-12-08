@@ -5,9 +5,6 @@
 
 using namespace Rcpp;
 
-#define REGISTER_JULIAAPI_SYMBOL(name) \
-    R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
-
 // [[Rcpp::export]]
 bool juliaapi_init(const std::string& libpath) {
     if (jl_main_module != nullptr) {
@@ -25,10 +22,8 @@ bool juliaapi_init(const std::string& libpath) {
     if (!load_libjulia_constants()) {
         stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
     }
-    REGISTER_JULIAAPI_SYMBOL(load_libjulia_symbol);
-    REGISTER_JULIAAPI_SYMBOL(load_libjulia_constant);
-    REGISTER_JULIAAPI_SYMBOL(cast_xptr);
-    REGISTER_JULIAAPI_SYMBOL(cast_jl_value_t);
+
+    register_juliaapi_symbols();
 
     return true;
 }

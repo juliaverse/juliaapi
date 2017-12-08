@@ -79,6 +79,30 @@ jl_value_t* jualiapi_call3(jl_value_t* f, jl_value_t* a, jl_value_t* b, jl_value
 }
 
 //' @export
+// [[Rcpp::export(jl_isa)]]
+int juliaapi_isa(jl_value_t* a, jl_value_t* t) {
+    return jl_isa(a, t);
+}
+
+//' @export
+// [[Rcpp::export(jl_types_equal)]]
+int juliaapi_types_equal(jl_value_t* a, jl_value_t* b) {
+    return jl_types_equal(a, b);
+}
+
+//' @export
+// [[Rcpp::export(jl_typename_str)]]
+const char* juliaapi_typename_str(jl_value_t* v) {
+    return jl_typename_str(v);
+}
+
+//' @export
+// [[Rcpp::export(jl_typeof_str)]]
+const char* juliaapi_typeof_str(jl_value_t* v) {
+    return jl_typeof_str(v);
+}
+
+//' @export
 // [[Rcpp::export(jl_symbol)]]
 jl_value_t* juliaapi_symbol(const char* str) {
     return (jl_value_t*) jl_symbol(str);

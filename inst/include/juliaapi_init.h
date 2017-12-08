@@ -142,6 +142,9 @@ if (!load_libjulia_symbol(#name, (void**) &name)) \
 bool load_libjulia_symbols() {
     LOAD_LIBJULIA_SYMBOL(jl_get_ptls_states);
 
+    LOAD_LIBJULIA_SYMBOL(jl_isa);
+    LOAD_LIBJULIA_SYMBOL(jl_types_equal);
+    LOAD_LIBJULIA_SYMBOL(jl_typename_str);
     LOAD_LIBJULIA_SYMBOL(jl_typeof_str);
 
     LOAD_LIBJULIA_SYMBOL(jl_symbol);
@@ -187,7 +190,7 @@ bool load_libjulia_symbols() {
     LOAD_LIBJULIA_SYMBOL(jl_is_initialized);
     LOAD_LIBJULIA_SYMBOL(jl_init);
     LOAD_LIBJULIA_SYMBOL(jl_atexit_hook);
-    
+
     LOAD_LIBJULIA_SYMBOL(jl_eval_string);
 
     LOAD_LIBJULIA_SYMBOL(jl_exception_occurred);
@@ -249,6 +252,18 @@ bool load_libjulia_constants() {
 
 #ifdef JULIAAPI_INTERNAL
     // load internally
+
+    #define REGISTER_JULIAAPI_SYMBOL(name) \
+        R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
+
+    void register_juliaapi_symbols() {
+        REGISTER_JULIAAPI_SYMBOL(cast_xptr);
+        REGISTER_JULIAAPI_SYMBOL(cast_jl_value_t);
+
+        REGISTER_JULIAAPI_SYMBOL(load_libjulia_symbol);
+        REGISTER_JULIAAPI_SYMBOL(load_libjulia_constant);
+    }
+
     void juliaapi_init();
 
 #else
