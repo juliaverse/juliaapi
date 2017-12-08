@@ -1,9 +1,7 @@
 #define JULIAAPI_INTERNAL
-#define JULIAAPI_CPP
+#define NO_RCPP
 #include "../inst/include/juliaapi.h"
-#include <Rcpp.h>
 
-using namespace Rcpp;
 
 //' @export
 // [[Rcpp::export(jl_unbox_bool)]]

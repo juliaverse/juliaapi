@@ -1,5 +1,4 @@
 #define JULIAAPI_INTERNAL
-#define JULIAAPI_UTILS
 #include "../inst/include/juliaapi.h"
 #include <Rcpp.h>
 

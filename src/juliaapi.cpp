@@ -1,9 +1,6 @@
 #define JULIAAPI_INTERNAL
-#define JULIAAPI_CPP
 #include "../inst/include/juliaapi.h"
 #include <Rcpp.h>
-
-using namespace Rcpp;
 
 //' @export
 // [[Rcpp::export(jl_eval_string)]]
@@ -29,7 +26,7 @@ SEXP juliaapi_get_function(jl_value_t* module, const char* str) {
 }
 
 //' @export
-jl_value_t* juliaapi_call(jl_value_t* f, List args) {
+jl_value_t* juliaapi_call(jl_value_t* f, Rcpp::List args) {
     int nargs = args.size();
     juliaapi_check_initialized();
     jl_value_t** a = new jl_value_t*[nargs];

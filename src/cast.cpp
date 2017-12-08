@@ -1,8 +1,10 @@
+#define JULIAAPI_INTERNAL
 #include "../inst/include/julia.h"
+#include <Rcpp.h>
+
 #include <stack>
 #include <map>
 #include <string>
-#include <Rcpp.h>
 
 std::map<jl_value_t*, std::pair<size_t, size_t> > gc_index_map;
 std::stack<size_t> gc_free_stack;

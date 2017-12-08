@@ -1,9 +1,8 @@
 #define JULIAAPI_INTERNAL
 #define JULIAAPI_INIT
 #include "../inst/include/juliaapi.h"
-#include <Rcpp.h>
+#include <Rcpp/exceptions.h>
 
-using namespace Rcpp;
 
 // [[Rcpp::export]]
 bool juliaapi_init(const std::string& libpath) {
@@ -11,16 +10,16 @@ bool juliaapi_init(const std::string& libpath) {
         return true;
     }
     if (!load_libjulia(libpath)) {
-        stop(libpath + " - " + get_last_dl_error_message());
+        Rcpp::stop(libpath + " - " + get_last_dl_error_message());
     }
     if (!load_libjulia_symbols()) {
-        stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
+        Rcpp::stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
     }
 
     jl_init();
 
     if (!load_libjulia_constants()) {
-        stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
+        Rcpp::stop(get_last_loaded_symbol() + " - " + get_last_dl_error_message());
     }
 
     register_juliaapi_symbols();

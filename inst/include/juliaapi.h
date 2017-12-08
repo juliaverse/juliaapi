@@ -3,12 +3,16 @@
 
 #include "julia.h"
 
+#ifndef NO_RCPP
 #include <RcppCommon.h>
 
 namespace Rcpp {
     SEXP wrap(jl_value_t* object);
     template<> jl_value_t* as(SEXP object);
 }
+#else
+#include <Rinternals.h>
+#endif
 
 #ifndef JULIAAPI_INIT
 #define JL_EXTERN extern
