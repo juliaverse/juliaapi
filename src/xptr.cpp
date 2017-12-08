@@ -85,5 +85,6 @@ jl_value_t* cast_jl_value_t(SEXP s) {
     if (TYPEOF(s) != EXTPTRSXP) {
         Rcpp::stop("exptect an externalptr");
     }
-    return (jl_value_t*) R_ExternalPtrAddr(s);
+    jl_value_t* p = (jl_value_t*) R_ExternalPtrAddr(s);
+    return p;
 }

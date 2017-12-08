@@ -145,7 +145,32 @@ bool load_libjulia_symbols() {
     LOAD_LIBJULIA_SYMBOL(jl_typeof_str);
 
     LOAD_LIBJULIA_SYMBOL(jl_symbol);
+
+    LOAD_LIBJULIA_SYMBOL(jl_box_bool);
+    LOAD_LIBJULIA_SYMBOL(jl_box_int8);
+    LOAD_LIBJULIA_SYMBOL(jl_box_uint8);
+    LOAD_LIBJULIA_SYMBOL(jl_box_int16);
+    LOAD_LIBJULIA_SYMBOL(jl_box_uint16);
+    LOAD_LIBJULIA_SYMBOL(jl_box_int32);
+    LOAD_LIBJULIA_SYMBOL(jl_box_uint32);
+    LOAD_LIBJULIA_SYMBOL(jl_box_char);
+    LOAD_LIBJULIA_SYMBOL(jl_box_int64);
+    LOAD_LIBJULIA_SYMBOL(jl_box_uint64);
+    LOAD_LIBJULIA_SYMBOL(jl_box_float32);
+    LOAD_LIBJULIA_SYMBOL(jl_box_float64);
     LOAD_LIBJULIA_SYMBOL(jl_box_voidpointer);
+
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_bool);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_int8);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_uint8);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_int16);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_uint16);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_int32);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_uint32);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_int64);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_uint64);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_float32);
+    LOAD_LIBJULIA_SYMBOL(jl_unbox_float64);
     LOAD_LIBJULIA_SYMBOL(jl_unbox_voidpointer);
 
     LOAD_LIBJULIA_SYMBOL(jl_alloc_array_1d);
@@ -162,6 +187,7 @@ bool load_libjulia_symbols() {
     LOAD_LIBJULIA_SYMBOL(jl_is_initialized);
     LOAD_LIBJULIA_SYMBOL(jl_init);
     LOAD_LIBJULIA_SYMBOL(jl_atexit_hook);
+    
     LOAD_LIBJULIA_SYMBOL(jl_eval_string);
 
     LOAD_LIBJULIA_SYMBOL(jl_exception_occurred);
@@ -223,17 +249,10 @@ bool load_libjulia_constants() {
 
 #ifdef JULIAAPI_INTERNAL
     // load internally
-
-    SEXP cast_xptr(jl_value_t* s, bool preserve);
-    jl_value_t* cast_jl_value_t(SEXP s);
     void juliaapi_init();
 
 #else
     // load externally
-
-    SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
-    jl_value_t* (*cast_jl_value_t)(SEXP s);
-
 
     void load_juliaapi_symbol(const std::string& name, void** ppSymbol) {
         *ppSymbol = (void*) R_GetCCallable("juliaapi", name.c_str());
@@ -244,10 +263,6 @@ bool load_libjulia_constants() {
     void juliaapi_init() {
         LOAD_JULIAAPI_SYMBOL(cast_xptr);
         LOAD_JULIAAPI_SYMBOL(cast_jl_value_t);
-
-        LOAD_JULIAAPI_SYMBOL(juliaapi_check_exception);
-        LOAD_JULIAAPI_SYMBOL(juliaapi_print);
-        LOAD_JULIAAPI_SYMBOL(juliaapi_eval_string);
 
         LOAD_JULIAAPI_SYMBOL(load_libjulia_symbol);
         LOAD_JULIAAPI_SYMBOL(load_libjulia_constant);

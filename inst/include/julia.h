@@ -92,14 +92,6 @@ JL_EXTERN jl_tls_states_t* (*jl_get_ptls_states)(void);
 
 #define JL_GC_POP() (jl_pgcstack = jl_pgcstack->prev)
 
-// object accessors
-#define jl_array_len(a)   (((jl_array_t*)(a))->length)
-#define jl_array_data(a)  ((void*)((jl_array_t*)(a))->data)
-#define jl_array_dim(a,i) ((&((jl_array_t*)(a))->nrows)[i])
-#define jl_array_dim0(a)  (((jl_array_t*)(a))->nrows)
-#define jl_array_nrows(a) (((jl_array_t*)(a))->nrows)
-#define jl_array_ndims(a) ((int32_t)(((jl_array_t*)a)->flags.ndims))
-
 // constants
 JL_EXTERN jl_value_t* jl_any_type;
 
@@ -126,16 +118,58 @@ JL_EXTERN jl_value_t* jl_true;
 JL_EXTERN jl_value_t* jl_false;
 JL_EXTERN jl_value_t* jl_nothing;
 
+
+// object accessors
+#define jl_array_len(a)   (((jl_array_t*)(a))->length)
+#define jl_array_data(a)  ((void*)((jl_array_t*)(a))->data)
+#define jl_array_dim(a,i) ((&((jl_array_t*)(a))->nrows)[i])
+#define jl_array_dim0(a)  (((jl_array_t*)(a))->nrows)
+#define jl_array_nrows(a) (((jl_array_t*)(a))->nrows)
+#define jl_array_ndims(a) ((int32_t)(((jl_array_t*)a)->flags.ndims))
+
+// get a pointer to the data in a datatype
+#define jl_data_ptr(v)  ((jl_value_t**)v)
+
+#define jl_array_ptr_data(a)   ((jl_value_t**)((jl_array_t*)a)->data)
+#define jl_string_data(s) ((char*)s + sizeof(void*))
+#define jl_string_len(s)  (*(size_t*)s)
+
+
 // type predicates and basic operations
 JL_EXTERN const char* (*jl_typeof_str)(jl_value_t *v);
 
 // constructors
 JL_EXTERN jl_sym_t* (*jl_symbol)(const char *str);
+
+JL_EXTERN jl_value_t* (*jl_box_bool)(int8_t x);
+JL_EXTERN jl_value_t* (*jl_box_int8)(int8_t x);
+JL_EXTERN jl_value_t* (*jl_box_uint8)(uint8_t x);
+JL_EXTERN jl_value_t* (*jl_box_int16)(int16_t x);
+JL_EXTERN jl_value_t* (*jl_box_uint16)(uint16_t x);
+JL_EXTERN jl_value_t* (*jl_box_int32)(int32_t x);
+JL_EXTERN jl_value_t* (*jl_box_uint32)(uint32_t x);
+JL_EXTERN jl_value_t* (*jl_box_char)(uint32_t x);
+JL_EXTERN jl_value_t* (*jl_box_int64)(int64_t x);
+JL_EXTERN jl_value_t* (*jl_box_uint64)(uint64_t x);
+JL_EXTERN jl_value_t* (*jl_box_float32)(float x);
+JL_EXTERN jl_value_t* (*jl_box_float64)(double x);
 JL_EXTERN jl_value_t* (*jl_box_voidpointer)(void *x);
+
+JL_EXTERN int8_t (*jl_unbox_bool)(jl_value_t *v);
+JL_EXTERN int8_t (*jl_unbox_int8)(jl_value_t *v);
+JL_EXTERN uint8_t (*jl_unbox_uint8)(jl_value_t *v);
+JL_EXTERN int16_t (*jl_unbox_int16)(jl_value_t *v);
+JL_EXTERN uint16_t (*jl_unbox_uint16)(jl_value_t *v);
+JL_EXTERN int32_t (*jl_unbox_int32)(jl_value_t *v);
+JL_EXTERN uint32_t (*jl_unbox_uint32)(jl_value_t *v);
+JL_EXTERN int64_t (*jl_unbox_int64)(jl_value_t *v);
+JL_EXTERN uint64_t (*jl_unbox_uint64)(jl_value_t *v);
+JL_EXTERN float (*jl_unbox_float32)(jl_value_t *v);
+JL_EXTERN double (*jl_unbox_float64)(jl_value_t *v);
 JL_EXTERN void* (*jl_unbox_voidpointer)(jl_value_t *v);
 
 // arrays
-JL_EXTERN jl_array_t* (*jl_alloc_array_1d)(jl_value_t *atype, size_t nr);
+JL_EXTERN jl_array_t* (*jl_alloc_array_1d)(jl_value_t* atype, size_t nr);
 JL_EXTERN jl_value_t* (*jl_apply_array_type)(jl_value_t *type, size_t dim);
 JL_EXTERN void (*jl_arrayset)(jl_array_t *a, jl_value_t *v, size_t i);  // 0-indexed
 JL_EXTERN void (*jl_arrayunset)(jl_array_t *a, size_t i);  // 0-indexed
@@ -145,6 +179,7 @@ JL_EXTERN void (*jl_array_grow_end)(jl_array_t *a, size_t inc);
 JL_EXTERN jl_module_t* jl_main_module;
 JL_EXTERN jl_module_t* jl_core_module;
 JL_EXTERN jl_module_t* jl_base_module;
+
 JL_EXTERN jl_module_t* (*jl_new_module)(jl_sym_t *name);
 JL_EXTERN jl_value_t* (*jl_get_global)(jl_module_t *m, jl_sym_t *var);
 STATIC_INLINE jl_function_t *jl_get_function(jl_module_t *m, const char *name)

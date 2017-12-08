@@ -19,16 +19,20 @@ namespace Rcpp {
 #ifdef JULIAAPI_INTERNAL
     // load internally
 
+    SEXP cast_xptr(jl_value_t* s, bool preserve);
+    jl_value_t* cast_jl_value_t(SEXP s);
+
+    bool juliaapi_init(const std::string& libpath);
+    bool juliaapi_is_initialized();
+    void juliaapi_check_initialized();
+    void juliaapi_show(jl_value_t* t);
     void juliaapi_check_exception();
-    void juliaapi_print(jl_value_t* t);
-    SEXP juliaapi_eval_string(const char* str, bool preserve);
 
 #else
     // load externally
 
-    JL_EXTERN void (*juliaapi_check_exception)();
-    JL_EXTERN void (*juliaapi_print)(jl_value_t* t);
-    JL_EXTERN SEXP (*juliaapi_eval_string)(const char* str, bool preserve);
+    JL_EXTERN SEXP (*cast_xptr)(jl_value_t* s, bool preserve);
+    JL_EXTERN jl_value_t* (*cast_jl_value_t)(SEXP s);
 
 #endif
 
