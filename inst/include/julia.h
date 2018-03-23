@@ -1,11 +1,10 @@
 #ifndef JULIA_H
 #define JULIA_H
 
-#include <string>
-#include <ostream>
+#include <string.h>
 #include <stdint.h>
 
-#ifndef JULIAAPI_INIT
+#ifndef JULIAAPI
 #define JL_EXTERN extern
 #else
 #define JL_EXTERN

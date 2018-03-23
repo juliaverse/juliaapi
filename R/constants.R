@@ -9,6 +9,16 @@ set_jl_value_xptr <- function(symbol) {
     eval(substitute(jl_set_xptr(x, y), list(x = name, y = as.character(name))))
 }
 
+jl_set_xptr <- function(xptr, symbol) {
+    .Call("juliaapi_set_xptr", PACKAGE = "juliaapi", xptr, symbol)
+    invisible(NULL)
+}
+
+jl_is_null_xptr <- function(t) {
+    .Call("juliaapi_is_null_xptr", PACKAGE = "juliaapi", t)
+}
+
+
 #' @export
 jl_any_type <- null_jl_value_xptr()
 #' @export
@@ -59,44 +69,3 @@ jl_void_type <- null_jl_value_xptr()
 jl_signed_type <- null_jl_value_xptr()
 #' @export
 jl_voidpointer_type <- null_jl_value_xptr()
-
-#' @export
-jl_init <- function() {
-    libjulia <- system2(
-        "julia", shQuote(c("-e", 'print(Libdl.dlpath("libjulia"))')), stdout = TRUE)
-
-    juliaapi_init(libjulia)
-
-    set_jl_value_xptr(jl_any_type)
-    set_jl_value_xptr(jl_nothing)
-    set_jl_value_xptr(jl_true)
-    set_jl_value_xptr(jl_false)
-    set_jl_value_xptr(jl_main_module)
-    set_jl_value_xptr(jl_core_module)
-    set_jl_value_xptr(jl_base_module)
-    set_jl_value_xptr(jl_bool_type)
-    set_jl_value_xptr(jl_char_type)
-    set_jl_value_xptr(jl_int8_type)
-    set_jl_value_xptr(jl_uint8_type)
-    set_jl_value_xptr(jl_int16_type)
-    set_jl_value_xptr(jl_uint16_type)
-    set_jl_value_xptr(jl_int32_type)
-    set_jl_value_xptr(jl_uint32_type)
-    set_jl_value_xptr(jl_int64_type)
-    set_jl_value_xptr(jl_uint64_type)
-    set_jl_value_xptr(jl_float16_type)
-    set_jl_value_xptr(jl_float32_type)
-    set_jl_value_xptr(jl_float64_type)
-    set_jl_value_xptr(jl_floatingpoint_type)
-    set_jl_value_xptr(jl_number_type)
-    set_jl_value_xptr(jl_void_type)
-    set_jl_value_xptr(jl_signed_type)
-    set_jl_value_xptr(jl_voidpointer_type)
-
-    invisible(TRUE)
-}
-
-#' @export
-jl_check_initialized <- function() {
-    jl_is_initialized() || jl_init()
-}
