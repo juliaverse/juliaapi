@@ -13,6 +13,10 @@ SEXP juliaapi_initialize(SEXP _libpath) {
     return Rf_ScalarLogical(1);
 }
 
+SEXP juliaapi_is_initialized() {
+    return Rf_ScalarLogical(jl_main_module != NULL);
+}
+
 void juliaapi_set_xptr(SEXP t, SEXP _name) {
     void* p;
     const char* name = R_CHAR(Rf_asChar(_name));

@@ -16,3 +16,8 @@ jl_init <- function(libpath = NULL) {
 
     invisible(NULL)
 }
+
+#' @export
+jl_is_initialized <- function() {
+    .Call("juliaapi_is_initialized", PACKAGE = "juliaapi")
+}

@@ -89,17 +89,6 @@ bool unload_julia() {
 
 #ifdef JULIAAPI_INTERNAL
 
-bool load_julia_symbol(const char* name, void** ppSymbol);
-bool load_julia_constant(const char* name, void** ppSymbol);
-
-#else
-
-bool (*load_julia_symbol)(const char* name, void** ppSymbol);
-bool (*load_julia_constant)(const char* name, void** ppSymbol);
-
-#endif
-
-
 bool load_julia_symbol(const char* name, void** ppSymbol) {
 
     strcpy(last_loaded_symbol, name);
@@ -135,6 +124,14 @@ bool load_julia_constant(const char* name, void** ppSymbol) {
         return true;
     }
 }
+
+#else
+
+bool (*load_julia_symbol)(const char* name, void** ppSymbol);
+bool (*load_julia_constant)(const char* name, void** ppSymbol);
+
+#endif
+
 
 #define LOAD_JULIA_SYMBOL_AS(name, as) \
 if (!load_julia_symbol(#name, (void**) &as)) \
@@ -265,6 +262,7 @@ bool load_julia_constants() {
     int juliaapi_init() {
         REGISTER_JULIAAPI_SYMBOL(load_julia_symbol);
         REGISTER_JULIAAPI_SYMBOL(load_julia_constant);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_is_initialized);
         REGISTER_JULIAAPI_SYMBOL(juliaapi_check_exception);
         REGISTER_JULIAAPI_SYMBOL(juliaapi_show);
         REGISTER_JULIAAPI_SYMBOL(cast_xptr);
@@ -289,6 +287,7 @@ bool load_julia_constants() {
     int juliaapi_init() {
         LOAD_JULIAAPI_SYMBOL(load_julia_symbol);
         LOAD_JULIAAPI_SYMBOL(load_julia_constant);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_is_initialized);
         LOAD_JULIAAPI_SYMBOL(juliaapi_check_exception);
         LOAD_JULIAAPI_SYMBOL(juliaapi_show);
         LOAD_JULIAAPI_SYMBOL(cast_xptr);
