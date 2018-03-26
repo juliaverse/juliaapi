@@ -11,12 +11,14 @@
 #if defined(JULIAAPI_INTERNAL) || !defined(JULIAAPI_INIT_H)
 
 SEXP juliaapi_is_initialized();
+void juliaapi_check_initialized();
 void juliaapi_check_exception();
 void juliaapi_show(SEXP s);
 
 #else
 
 SEXP (*juliaapi_is_initialized)();
+void (*juliaapi_check_initialized)();
 void (*juliaapi_check_exception)();
 void (*juliaapi_show)(SEXP s);
 
