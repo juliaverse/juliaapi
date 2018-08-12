@@ -2,7 +2,9 @@
 jl_init <- function(libpath = NULL) {
     if (is.null(libpath)) {
         libpath <- system2(
-                "julia", shQuote(c("-e", 'print(Libdl.dlpath("libjulia"))')), stdout = TRUE)
+                "julia",
+                shQuote(c("-e", 'using Libdl; print(Libdl.dlpath("libjulia"))')),
+                stdout = TRUE)
     }
     .Call("juliaapi_initialize", PACKAGE = "juliaapi", libpath)
 

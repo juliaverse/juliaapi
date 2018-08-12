@@ -191,7 +191,11 @@ bool load_julia_symbols() {
     LOAD_JULIA_SYMBOL(jl_set_const);
 
     LOAD_JULIA_SYMBOL(jl_is_initialized);
-    LOAD_JULIA_SYMBOL(jl_init);
+
+    if (!load_julia_symbol("jl_init", (void**) &jl_init) && \
+            !load_julia_symbol("jl_init__threading", (void**) &jl_init))
+        return false;
+
     LOAD_JULIA_SYMBOL(jl_atexit_hook);
 
     LOAD_JULIA_SYMBOL(jl_eval_string);
