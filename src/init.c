@@ -1,4 +1,4 @@
-#define JULIAAPI_INTERNAL
+#define JULIAAPI
 #include "../inst/include/juliaapi_init.h"
 
 

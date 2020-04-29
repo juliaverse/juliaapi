@@ -4,10 +4,8 @@
 #include <string.h>
 #include <stdint.h>
 
-#ifndef JULIAAPI
+#ifndef JL_EXTERN
 #define JL_EXTERN extern
-#else
-#define JL_EXTERN
 #endif
 
 #if defined(_OS_WINDOWS_) && defined(_COMPILER_INTEL_)

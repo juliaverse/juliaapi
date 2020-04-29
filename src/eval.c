@@ -1,3 +1,4 @@
+#define JULIAAPI
 #include "../inst/include/juliaapi.h"
 
 void juliaapi_check_exception() {

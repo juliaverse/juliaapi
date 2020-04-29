@@ -8,7 +8,8 @@
 #include "julia.h"
 #include "juliaapi_cast.h"
 
-#if defined(JULIAAPI_INTERNAL) || !defined(JULIAAPI_INIT_H)
+
+#ifdef JULIAAPI
 
 SEXP juliaapi_is_initialized();
 void juliaapi_check_initialized();

@@ -1,3 +1,4 @@
+#define JULIAAPI
 #include "../inst/include/juliaapi.h"
 
 SEXP juliaapi_box_bool(SEXP x) {

@@ -1,3 +1,4 @@
+#define JULIAAPI
 #include "../inst/include/juliaapi.h"
 
 SEXP juliaapi_unbox_bool(SEXP v) {

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define JULIAAPI
+#define JL_EXTERN
 #include "julia.h"
 
 #include "juliaapi.h"
@@ -257,7 +257,7 @@ bool load_julia_constants() {
 }
 
 
-#ifdef JULIAAPI_INTERNAL
+#ifdef JULIAAPI
     // load internally
 
     #define REGISTER_JULIAAPI_SYMBOL(name) \
