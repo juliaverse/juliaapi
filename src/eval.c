@@ -1,7 +1,7 @@
 #define JULIAAPI
 #include "../inst/include/juliaapi.h"
 
-void juliaapi_check_exception() {
+SEXP juliaapi_check_exception() {
     jl_function_t* show = jl_get_function(jl_base_module, "showerror");
     jl_function_t* sprint = jl_get_function(jl_base_module, "sprint");
     jl_value_t* exception = jl_exception_occurred();
@@ -13,9 +13,10 @@ void juliaapi_check_exception() {
             juliaapi_check_exception();
         }
     }
+    return R_NilValue;
 }
 
-void juliaapi_show(SEXP s) {
+SEXP juliaapi_show(SEXP s) {
     jl_value_t* t = (jl_value_t*) R_ExternalPtrAddr(s);
     jl_function_t* show = jl_get_function(jl_base_module, "show");
     jl_value_t* mime = jl_eval_string("MIME(\"text/plain\")");
@@ -26,6 +27,7 @@ void juliaapi_show(SEXP s) {
     } else {
         juliaapi_check_exception();
     }
+    return R_NilValue;
 }
 
 SEXP juliaapi_eval_string(SEXP _str) {
@@ -49,14 +51,14 @@ SEXP juliaapi_call1(SEXP f, SEXP a) {
     return cast_xptr(result, 1);
 }
 
-SEXP jualiapi_call2(SEXP f, SEXP a, SEXP b) {
+SEXP juliaapi_call2(SEXP f, SEXP a, SEXP b) {
     juliaapi_check_initialized();
     jl_value_t* result = jl_call2(cast_jl_value_t(f), cast_jl_value_t(a), cast_jl_value_t(b));
     juliaapi_check_exception();
     return cast_xptr(result, 1);
 }
 
-SEXP jualiapi_call3(SEXP f, SEXP a, SEXP b, SEXP c) {
+SEXP juliaapi_call3(SEXP f, SEXP a, SEXP b, SEXP c) {
     juliaapi_check_initialized();
     jl_value_t* result = jl_call3(
         cast_jl_value_t(f), cast_jl_value_t(a), cast_jl_value_t(b), cast_jl_value_t(c));

@@ -4,7 +4,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#ifndef JL_EXTERN
+#ifdef JULIAAPI_INIT_H
+#define JL_EXTERN
+#else
 #define JL_EXTERN extern
 #endif
 

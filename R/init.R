@@ -1,12 +1,16 @@
+libjulia_path <- function() {
+    system2(
+        "julia",
+        shQuote(c("-e", 'using Libdl; print(Libdl.dlpath("libjulia"))')),
+        stdout = TRUE)
+}
+
 #' @export
-jl_init <- function(libpath = NULL) {
-    if (is.null(libpath)) {
-        libpath <- system2(
-                "julia",
-                shQuote(c("-e", 'using Libdl; print(Libdl.dlpath("libjulia"))')),
-                stdout = TRUE)
+jl_init <- function(libjulia = NULL) {
+    if (is.null(libjulia)) {
+        libjulia <- libjulia_path()
     }
-    .Call("juliaapi_initialize", PACKAGE = "juliaapi", libpath)
+    .Call(C_juliaapi_initialize, libjulia)
 
     pkg_env <- asNamespace("juliaapi")
     for (objname in ls(envir = pkg_env)) {
@@ -21,5 +25,5 @@ jl_init <- function(libpath = NULL) {
 
 #' @export
 jl_is_initialized <- function() {
-    .Call("juliaapi_is_initialized", PACKAGE = "juliaapi")
+    .Call(C_juliaapi_is_initialized)
 }

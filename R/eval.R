@@ -1,35 +1,35 @@
 #' @export
 print.jl_value <- function(s) {
-    if (jl_is_null_xptr(s)) {
+    if (jl_is_null_ptr(s)) {
         stop("unexpected null pointer")
     }
-    .Call("juliaapi_show", PACKAGE = "juliaapi", s)
+    .Call(C_juliaapi_show, s)
     invisible(s)
 }
 
 #' @export
 jl_eval_string <- function(str) {
-    .Call("juliaapi_eval_string", PACKAGE = "juliaapi", str)
+    .Call(C_juliaapi_eval_string, str)
 }
 
 #' @export
 jl_call0 <- function(f) {
-    .Call("juliaapi_call0", PACKAGE = "juliaapi", f)
+    .Call(C_juliaapi_call0, f)
 }
 
 #' @export
 jl_call1 <- function(f, a) {
-    .Call("juliaapi_call1", PACKAGE = "juliaapi", f, a)
+    .Call(C_juliaapi_call1, f, a)
 }
 
 
 #' @export
 jl_call2 <- function(f, a) {
-    .Call("juliaapi_call2", PACKAGE = "juliaapi", f, a, b)
+    .Call(C_juliaapi_call2, f, a, b)
 }
 
 
 #' @export
 jl_call3 <- function(str) {
-    .Call("juliaapi_call3", PACKAGE = "juliaapi", f, a, b, c)
+    .Call(C_juliaapi_call3, f, a, b, c)
 }

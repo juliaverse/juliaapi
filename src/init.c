@@ -17,20 +17,21 @@ SEXP juliaapi_is_initialized() {
     return Rf_ScalarLogical(jl_main_module != NULL);
 }
 
-void juliaapi_check_initialized() {
-    return;
+SEXP juliaapi_check_initialized() {
+    return R_NilValue;
 }
 
-void juliaapi_set_xptr(SEXP t, SEXP _name) {
+SEXP juliaapi_set_xptr(SEXP t, SEXP _name) {
     void* p;
     const char* name = R_CHAR(Rf_asChar(_name));
     load_julia_constant(name, (void**) &p);
     R_SetExternalPtrAddr(t, p);
+    return t;
 }
 
-SEXP juliaapi_is_null_xptr(SEXP t) {
+SEXP juliaapi_is_null_ptr(SEXP t) {
     if (TYPEOF(t) != EXTPTRSXP) {
-        Rf_error("exptect an externalptr");
+        Rf_error("expect an externalptr");
     }
     return Rf_ScalarLogical(R_ExternalPtrAddr(t) == NULL);
 }

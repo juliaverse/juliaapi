@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define JL_EXTERN
 #include "julia.h"
-
 #include "juliaapi.h"
 
 #ifndef _WIN32
@@ -87,8 +85,6 @@ bool unload_julia() {
     return true;
 }
 
-#ifdef JULIAAPI_INTERNAL
-
 bool load_julia_symbol(const char* name, void** ppSymbol) {
 
     strcpy(last_loaded_symbol, name);
@@ -124,13 +120,6 @@ bool load_julia_constant(const char* name, void** ppSymbol) {
         return true;
     }
 }
-
-#else
-
-bool (*load_julia_symbol)(const char* name, void** ppSymbol);
-bool (*load_julia_constant)(const char* name, void** ppSymbol);
-
-#endif
 
 
 #define LOAD_JULIA_SYMBOL_AS(name, as) \

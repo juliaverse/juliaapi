@@ -1,5 +1,6 @@
 #ifndef JULIAAPI_CAST_H
 #define JULIAAPI_CAST_H
+#include "juliaapi.h"
 
 #ifdef JULIAAPI
 

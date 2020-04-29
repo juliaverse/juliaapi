@@ -10,12 +10,12 @@ set_jl_value_xptr <- function(symbol) {
 }
 
 jl_set_xptr <- function(xptr, symbol) {
-    .Call("juliaapi_set_xptr", PACKAGE = "juliaapi", xptr, symbol)
+    .Call(C_juliaapi_set_xptr, xptr, symbol)
     invisible(NULL)
 }
 
-jl_is_null_xptr <- function(t) {
-    .Call("juliaapi_is_null_xptr", PACKAGE = "juliaapi", t)
+jl_is_null_ptr <- function(t) {
+    .Call(C_juliaapi_is_null_ptr, t)
 }
 
 
