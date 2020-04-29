@@ -253,13 +253,44 @@ bool load_julia_constants() {
         R_RegisterCCallable("juliaapi", #name, (DL_FUNC) name);
 
     int juliaapi_init() {
-        REGISTER_JULIAAPI_SYMBOL(load_julia_symbol);
-        REGISTER_JULIAAPI_SYMBOL(load_julia_constant);
+
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_initialize);
         REGISTER_JULIAAPI_SYMBOL(juliaapi_is_initialized);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_check_initialized);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_set_xptr);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_is_null_ptr);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_bool);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_int8);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_uint8);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_int16);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_uint16);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_int32);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_uint32);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_char);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_int64);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_uint64);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_float32);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_float64);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_box_voidpointer);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_bool);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_int8);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_uint8);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_int16);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_uint16);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_int32);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_uint32);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_int64);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_uint64);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_float32);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_float64);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_unbox_voidpointer);
         REGISTER_JULIAAPI_SYMBOL(juliaapi_check_exception);
         REGISTER_JULIAAPI_SYMBOL(juliaapi_show);
-        REGISTER_JULIAAPI_SYMBOL(cast_xptr);
-        REGISTER_JULIAAPI_SYMBOL(cast_jl_value_t);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_eval_string);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_call0);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_call1);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_call2);
+        REGISTER_JULIAAPI_SYMBOL(juliaapi_call3);
 
         if (!load_julia_symbols()) return false;
         jl_init();
@@ -278,13 +309,44 @@ bool load_julia_constants() {
     #define LOAD_JULIAAPI_SYMBOL(name) load_juliaapi_symbol(#name, (void**) &name)
 
     int juliaapi_init() {
-        LOAD_JULIAAPI_SYMBOL(load_julia_symbol);
-        LOAD_JULIAAPI_SYMBOL(load_julia_constant);
+
+        LOAD_JULIAAPI_SYMBOL(juliaapi_initialize);
         LOAD_JULIAAPI_SYMBOL(juliaapi_is_initialized);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_check_initialized);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_set_xptr);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_is_null_ptr);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_bool);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_int8);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_uint8);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_int16);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_uint16);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_int32);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_uint32);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_char);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_int64);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_uint64);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_float32);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_float64);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_box_voidpointer);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_bool);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_int8);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_uint8);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_int16);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_uint16);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_int32);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_uint32);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_int64);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_uint64);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_float32);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_float64);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_unbox_voidpointer);
         LOAD_JULIAAPI_SYMBOL(juliaapi_check_exception);
         LOAD_JULIAAPI_SYMBOL(juliaapi_show);
-        LOAD_JULIAAPI_SYMBOL(cast_xptr);
-        LOAD_JULIAAPI_SYMBOL(cast_jl_value_t);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_eval_string);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_call0);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_call1);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_call2);
+        LOAD_JULIAAPI_SYMBOL(juliaapi_call3);
 
         if (!load_julia_symbols()) return false;
         if (!load_julia_constants()) return false;
